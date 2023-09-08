@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
 import javax.persistence.metamodel.EntityType
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.*
 
 @Component
@@ -44,22 +45,23 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
 
     fun generateEntityStructure(entityClass: KClass<*>, orderedEntityClasses: List<KClass<*>>, visited: MutableSet<KClass<*>> = mutableSetOf()): Map<String, Any> {
         if (entityClass in visited) return emptyMap()
-
         visited.add(entityClass)
 
         val structure = LinkedHashMap<String, Any>()
 
-        // Separate ID properties and other properties
-        val idProperties = entityClass.memberProperties.filter { it.annotations.any { annotation -> annotation is Id } }
-        val otherProperties = entityClass.memberProperties - idProperties
+        // 1. Find all properties
+        val allProperties = entityClass.memberProperties
 
-        // Process ID properties first
-        idProperties.forEach { prop ->
-            structure[prop.name] = prop.returnType.toString()
+        // 2. Find the @Id property, if it exists
+        val idProperty = allProperties.firstOrNull { it.annotations.any { annotation -> annotation is Id } }
+
+        // 3. If there's an @Id property, add it first
+        if (idProperty != null) {
+            structure[idProperty.name] = idProperty.returnType.toString()
         }
 
-        // Process other properties
-        otherProperties.forEach { prop ->
+        // 4. Process other properties
+        allProperties.filterNot { it === idProperty }.forEach { prop ->
             val nestedClass = prop.returnType.classifier as? KClass<*>
             if (nestedClass != null && nestedClass in orderedEntityClasses && nestedClass !in visited) {
                 structure[prop.name] = generateEntityStructure(nestedClass, orderedEntityClasses, visited)
@@ -70,6 +72,13 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
 
         return structure
     }
+
+
+
+
+
+
+
 
 
 
