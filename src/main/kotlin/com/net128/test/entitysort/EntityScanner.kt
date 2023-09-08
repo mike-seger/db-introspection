@@ -2,8 +2,10 @@ package com.net128.test.entitysort
 
 import org.springframework.stereotype.Component
 import javax.persistence.EntityManagerFactory
+import javax.persistence.Id
 import javax.persistence.metamodel.EntityType
 import kotlin.reflect.KClass
+import kotlin.reflect.full.*
 
 @Component
 class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
@@ -14,6 +16,65 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
         val graph = buildDependencyGraph(entities)
         return topologicalSort(graph)
     }
+
+    fun getEntityStructure(): Map<String, Any> {
+        val orderedEntityClasses = getOrderedEntityClasses()
+        val resultStructure = mutableMapOf<String, Any>()
+
+        val nestedEntities = mutableSetOf<KClass<*>>()
+
+        // Identify all nested entities
+        orderedEntityClasses.forEach { entity ->
+            entity.memberProperties.forEach { prop ->
+                if (orderedEntityClasses.contains(prop.returnType.classifier as? KClass<*>)) {
+                    nestedEntities.add(prop.returnType.classifier as KClass<*>)
+                }
+            }
+        }
+
+        // Add only the top-level entities to the result
+        orderedEntityClasses.forEach { entity ->
+            if (entity !in nestedEntities) {
+                resultStructure[entity.simpleName ?: "Unknown"] = generateEntityStructure(entity, orderedEntityClasses)
+            }
+        }
+
+        return resultStructure
+    }
+
+    fun generateEntityStructure(entityClass: KClass<*>, orderedEntityClasses: List<KClass<*>>, visited: MutableSet<KClass<*>> = mutableSetOf()): Map<String, Any> {
+        if (entityClass in visited) return emptyMap()
+
+        visited.add(entityClass)
+
+        val structure = LinkedHashMap<String, Any>()
+
+        // Separate ID properties and other properties
+        val idProperties = entityClass.memberProperties.filter { it.annotations.any { annotation -> annotation is Id } }
+        val otherProperties = entityClass.memberProperties - idProperties
+
+        // Process ID properties first
+        idProperties.forEach { prop ->
+            structure[prop.name] = prop.returnType.toString()
+        }
+
+        // Process other properties
+        otherProperties.forEach { prop ->
+            val nestedClass = prop.returnType.classifier as? KClass<*>
+            if (nestedClass != null && nestedClass in orderedEntityClasses && nestedClass !in visited) {
+                structure[prop.name] = generateEntityStructure(nestedClass, orderedEntityClasses, visited)
+            } else {
+                structure[prop.name] = prop.returnType.toString()
+            }
+        }
+
+        return structure
+    }
+
+
+
+
+
 
     private fun buildDependencyGraph(entities: Set<EntityType<*>>): Map<KClass<*>, List<KClass<*>>> {
         val graph = mutableMapOf<KClass<*>, MutableList<KClass<*>>>()

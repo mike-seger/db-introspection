@@ -10,4 +10,9 @@ class Controller(private val entityScanner: EntityScanner) {
 	fun entities(): List<String> {
 		return entityScanner.getOrderedEntityClasses().map { it.simpleName }.filterNotNull().toList()
 	}
+
+	@GetMapping("/erm")
+	fun erm(): Map<String, Any> {
+		return entityScanner.getEntityStructure()
+	}
 }
