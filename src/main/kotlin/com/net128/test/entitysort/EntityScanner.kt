@@ -1,14 +1,20 @@
 package com.net128.test.entitysort
 
 import org.springframework.stereotype.Component
+import java.io.Writer
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
 import javax.persistence.metamodel.EntityType
+
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 import kotlin.reflect.full.*
+import kotlin.reflect.jvm.javaField
 
 @Component
 class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
+    // Map to store @Id properties for each entity class
+    private val idPropertiesMap: MutableMap<KClass<*>, KProperty<*>> = scanForIdProperties()
 
     fun getOrderedEntityClasses(): List<KClass<*>> {
         val metaModel = entityManagerFactory.metamodel
@@ -42,17 +48,70 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
         return resultStructure
     }
 
-    fun generateEntityStructure(entityClass: KClass<*>, orderedEntityClasses: List<KClass<*>>, visited: MutableSet<KClass<*>> = mutableSetOf()): Map<String, Any> {
+    fun generateSVG(writer: Writer, width: Int, height: Int) {
+        val svgHeader = """
+            <svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg">
+                <style>
+                    .entity { fill: #f0f0f0; stroke: #000; stroke-width: 2; }
+                    .property { fill: #ffffff; stroke: #000; stroke-width: 1; }
+                    .arrow { fill: none; stroke: #000; stroke-width: 2; }
+                </style>
+            """.trimIndent()
+
+        val svgFooter = "</svg>"
+
+        writer.write(svgHeader)
+        val svgContent = StringBuilder()
+        visualizeEntitySVG(getEntityStructure(), 50, 50, svgContent)
+        writer.write(svgContent.toString())
+        writer.write(svgFooter)
+    }
+
+    fun visualizeEntitySVG(entityStructure: Map<String, Any>, x: Int, y: Int, svgContent: StringBuilder) {
+        var currentX = x
+        var currentY = y
+
+        for ((entityName, properties) in entityStructure) {
+            // Draw entity box
+            svgContent.append("""
+            <rect x="$currentX" y="$currentY" width="200" height="40" class="entity" />
+            <text x="${currentX + 10}" y="${currentY + 25}" font-size="14">${entityName}</text>
+        """.trimIndent())
+
+            // Draw properties
+            currentY += 60
+            for ((propertyName, propertyType) in properties as Map<String, Any>) {
+                // Draw property box
+                svgContent.append("""
+                <rect x="$currentX" y="$currentY" width="180" height="30" class="property" />
+                <text x="${currentX + 10}" y="${currentY + 20}" font-size="12">${propertyName}: ${propertyType}</text>
+            """.trimIndent())
+
+                // Draw arrow connecting property to entity
+                svgContent.append("""
+                <line x1="${currentX + 190}" y1="${currentY + 15}" x2="${currentX + 210}" y2="${currentY + 15}" class="arrow" />
+            """.trimIndent())
+
+                currentY += 50
+            }
+
+            currentX += 250
+            currentY = y
+        }
+    }
+
+    private fun generateEntityStructure(entityClass: KClass<*>, orderedEntityClasses: List<KClass<*>>, visited: MutableSet<KClass<*>> = mutableSetOf()): Map<String, Any> {
         if (entityClass in visited) return emptyMap()
         visited.add(entityClass)
 
         val structure = LinkedHashMap<String, Any>()
 
-        // 1. Find all properties
+        // 1. Find all properties in the declaration order
         val allProperties = entityClass.memberProperties
+            .sortedBy { it.javaField?.name }
 
-        // 2. Find the @Id property, if it exists
-        val idProperty = allProperties.firstOrNull { it.annotations.any { annotation -> annotation is Id } }
+        // 2. Find the @Id property from the map
+        val idProperty = idPropertiesMap[entityClass]
 
         // 3. If there's an @Id property, add it first
         if (idProperty != null) {
@@ -132,5 +191,24 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
         result.addAll(noDependencies)
 
         return result
+    }
+
+    private fun scanForIdProperties() : MutableMap<KClass<*>, KProperty<*>> {
+        val idPropertiesMap: MutableMap<KClass<*>, KProperty<*>> = mutableMapOf()
+        val entityManager = entityManagerFactory.createEntityManager()
+        val metaModel = entityManager.metamodel
+
+        for (entityType: EntityType<*> in metaModel.entities) {
+            val entityClass = entityType.javaType.kotlin
+            val idProperties = entityClass.memberProperties.filter {
+                it.javaField?.isAnnotationPresent(Id::class.java) ?: false
+            }
+
+            if (idProperties.isNotEmpty()) {
+                idPropertiesMap[entityClass] = idProperties.first()
+            }
+        }
+
+        return idPropertiesMap
     }
 }
