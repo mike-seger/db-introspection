@@ -5,7 +5,6 @@ import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
 import javax.persistence.metamodel.EntityType
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty1
 import kotlin.reflect.full.*
 
 @Component
@@ -72,18 +71,6 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
 
         return structure
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     private fun buildDependencyGraph(entities: Set<EntityType<*>>): Map<KClass<*>, List<KClass<*>>> {
         val graph = mutableMapOf<KClass<*>, MutableList<KClass<*>>>()
