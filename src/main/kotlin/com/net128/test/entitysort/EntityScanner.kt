@@ -1,12 +1,9 @@
 package com.net128.test.entitysort
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import javax.persistence.Table
 import javax.persistence.EntityManagerFactory
 import javax.persistence.metamodel.EntityType
 import kotlin.reflect.KClass
-import kotlin.reflect.full.findAnnotation
 
 @Component
 class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
@@ -14,85 +11,69 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
     fun getOrderedEntityClasses(): List<KClass<*>> {
         val metaModel = entityManagerFactory.metamodel
         val entities = metaModel.entities
-        val sameTableMap = mutableMapOf<String, MutableList<KClass<*>>>()
-        val graph = buildDependencyGraph(entities, sameTableMap)
-        return topologicalSort(graph, sameTableMap)
+        val graph = buildDependencyGraph(entities)
+        return topologicalSort(graph)
     }
 
-    private fun buildDependencyGraph(
-        entities: Set<EntityType<*>>,
-        sameTableMap: MutableMap<String, MutableList<KClass<*>>>
-    ): Map<KClass<*>, List<KClass<*>>> {
+    private fun buildDependencyGraph(entities: Set<EntityType<*>>): Map<KClass<*>, List<KClass<*>>> {
         val graph = mutableMapOf<KClass<*>, MutableList<KClass<*>>>()
-        
+
         for (entity in entities) {
             val entityKClass = entity.javaType.kotlin
             graph[entityKClass] = mutableListOf()
-            
-            val tableName = entityKClass.findAnnotation<Table>()?.name
-                ?: entityKClass.simpleName?.uppercase()
-            
-            if (tableName != null) {
-                sameTableMap.getOrPut(tableName) { mutableListOf() }.add(entityKClass)
-            }
-            
+
             for (attr in entity.attributes) {
-                val attrType = attr.javaType.kotlin
-                if (graph.containsKey(attrType)) {
+                if (attr.isAssociation) {
+                    val attrType = attr.javaType.kotlin
                     graph[entityKClass]?.add(attrType)
                 }
             }
         }
-        
+
         return graph
     }
 
     private fun topologicalSort(
-        graph: Map<KClass<*>, List<KClass<*>>>,
-        sameTableMap: Map<String, List<KClass<*>>>
+        graph: Map<KClass<*>, List<KClass<*>>>
     ): List<KClass<*>> {
         val result = mutableListOf<KClass<*>>()
         val visited = mutableSetOf<KClass<*>>()
-        
-        for (node in graph.keys) {
+        val currentPath = mutableSetOf<KClass<*>>()
+        // Set of entities that are dependencies for other entities
+        val dependentEntities = graph.values.flatten().toSet()
+
+        // Adjusting the noDependencies logic
+        val noDependencies = graph.keys.filter {
+            graph[it]?.isEmpty() == true && it !in dependentEntities
+        }.sortedBy { it.simpleName }
+
+        fun visit(node: KClass<*>) {
             if (!visited.contains(node)) {
-                dfs(node, graph, visited, result, sameTableMap)
-            }
-        }
-        
-        return result.reversed()
-    }
+                if (currentPath.contains(node)) {
+                    throw RuntimeException("Cyclic dependency detected involving ${node.simpleName}.")
+                }
 
-    private fun dfs(
-        node: KClass<*>,
-        graph: Map<KClass<*>, List<KClass<*>>>,
-        visited: MutableSet<KClass<*>>,
-        result: MutableList<KClass<*>>,
-        sameTableMap: Map<String, List<KClass<*>>>
-    ) {
-        visited.add(node)
+                currentPath.add(node)
+                for (dependency in graph[node] ?: emptyList()) {
+                    visit(dependency)
+                }
+                currentPath.remove(node)
 
-        graph[node]?.forEach { neighbor ->
-            if (!visited.contains(neighbor)) {
-                dfs(neighbor, graph, visited, result, sameTableMap)
-            }
-        }
-
-        val tableName = node.findAnnotation<Table>()?.name ?: node.simpleName?.uppercase()
-
-        if (tableName != null) {
-            val sameTableEntities = sameTableMap[tableName]?.filter { it != node } ?: emptyList()
-
-            // Sort entities based on whether they have dependencies or not.
-            val sortedEntities = sameTableEntities.sortedBy { graph[it]?.size ?: 0 }
-
-            for (entity in sortedEntities) {
-                if (!result.contains(entity)) {
-                    result.add(entity)
+                visited.add(node)
+                if (node !in result) {
+                    result.add(node)
                 }
             }
         }
 
-        result.add(node)
+        // Only start with entities that have dependencies
+        for (entity in graph.keys.filter { it !in noDependencies }) {
+            visit(entity)
+        }
+
+        // Then, append the entities without dependencies
+        result.addAll(noDependencies)
+
+        return result
     }
 }
