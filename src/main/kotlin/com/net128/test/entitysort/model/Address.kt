@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "address")
 class Address (
-    @Column(name = "address_id", nullable = false)
+    @Column(name = "address_id", nullable = false, unique = true)
     var addressId: String,
 
     @Column(nullable = false)
