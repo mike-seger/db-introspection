@@ -1,9 +1,9 @@
 package com.net128.test.entitysort
 
 import org.springframework.stereotype.Component
-import java.io.Writer
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
+import javax.persistence.metamodel.Attribute.PersistentAttributeType
 import javax.persistence.metamodel.EntityType
 
 import kotlin.reflect.KClass
@@ -48,56 +48,49 @@ class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
         return resultStructure
     }
 
-    fun generateSVG(writer: Writer, width: Int, height: Int) {
-        val svgHeader = """
-            <svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg">
-                <style>
-                    .entity { fill: #f0f0f0; stroke: #000; stroke-width: 2; }
-                    .property { fill: #ffffff; stroke: #000; stroke-width: 1; }
-                    .arrow { fill: none; stroke: #000; stroke-width: 2; }
-                </style>
-            """.trimIndent()
+    fun generateERM(width: Int = 800, height: Int = 600): String {
+        val metaModel = entityManagerFactory.metamodel
+        val entities: Set<EntityType<*>> = metaModel.entities
 
-        val svgFooter = "</svg>"
+        val svgBuilder = StringBuilder()
 
-        writer.write(svgHeader)
-        val svgContent = StringBuilder()
-        visualizeEntitySVG(getEntityStructure(), 50, 50, svgContent)
-        writer.write(svgContent.toString())
-        writer.write(svgFooter)
-    }
+        // Start SVG
+        svgBuilder.append("<svg width=\"$width\" height=\"$height\" xmlns=\"http://www.w3.org/2000/svg\">\n")
 
-    fun visualizeEntitySVG(entityStructure: Map<String, Any>, x: Int, y: Int, svgContent: StringBuilder) {
-        var currentX = x
-        var currentY = y
+        val x = 10
+        var y = 10
 
-        for ((entityName, properties) in entityStructure) {
-            // Draw entity box
-            svgContent.append("""
-            <rect x="$currentX" y="$currentY" width="200" height="40" class="entity" />
-            <text x="${currentX + 10}" y="${currentY + 25}" font-size="14">${entityName}</text>
-        """.trimIndent())
+        // Iterate over entities
+        for (entity in entities) {
+            svgBuilder.append("""<rect x="$x" y="$y" width="150" height="40" style="fill:white;stroke:black;stroke-width:2" />""")
+            svgBuilder.append("""<text x="${x + 5}" y="${y + 25}" font-family="Arial" font-size="12" fill="black">${entity.name}</text>""")
 
-            // Draw properties
-            currentY += 60
-            for ((propertyName, propertyType) in properties as Map<String, Any>) {
-                // Draw property box
-                svgContent.append("""
-                <rect x="$currentX" y="$currentY" width="180" height="30" class="property" />
-                <text x="${currentX + 10}" y="${currentY + 20}" font-size="12">${propertyName}: ${propertyType}</text>
-            """.trimIndent())
+            y += 50
 
-                // Draw arrow connecting property to entity
-                svgContent.append("""
-                <line x1="${currentX + 190}" y1="${currentY + 15}" x2="${currentX + 210}" y2="${currentY + 15}" class="arrow" />
-            """.trimIndent())
+            for (attribute in entity.attributes) {
+                if (attribute.isAssociation) {
+                    val relationType = when (attribute.persistentAttributeType) {
+                        PersistentAttributeType.MANY_TO_ONE,
+                        PersistentAttributeType.ONE_TO_ONE -> "----"
+                        PersistentAttributeType.ONE_TO_MANY,
+                        PersistentAttributeType.MANY_TO_MANY -> "===="
+                        else -> ""
+                    }
 
-                currentY += 50
+                    svgBuilder.append("""<line x1="$x" y1="$y" x2="${x + 150}" y2="$y" style="stroke:black;stroke-width:2" d="$relationType"/>""")
+                    svgBuilder.append("""<text x="${x + 5}" y="${y + 20}" font-family="Arial" font-size="12" fill="black">${attribute.name}</text>""")
+
+                    y += 25
+                }
             }
 
-            currentX += 250
-            currentY = y
+            y += 50
         }
+
+        // End SVG
+        svgBuilder.append("</svg>")
+
+        return svgBuilder.toString()
     }
 
     private fun generateEntityStructure(entityClass: KClass<*>, orderedEntityClasses: List<KClass<*>>, visited: MutableSet<KClass<*>> = mutableSetOf()): Map<String, Any> {

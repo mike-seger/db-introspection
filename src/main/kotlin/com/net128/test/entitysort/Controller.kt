@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-class Controller(private val entityScanner: EntityScanner) {
+class Controller(private val entityScanner: EntityScanner, private val schemaSpyService: SchemaSpyService) {
 
 	@GetMapping
 	fun entities(): List<String> {
@@ -23,9 +23,13 @@ class Controller(private val entityScanner: EntityScanner) {
 		response.characterEncoding = "UTF-8"
 
 		val svgWriter = response.writer
-
-		entityScanner.generateSVG(svgWriter, width, height)
+		svgWriter.write(entityScanner.generateERM())
 		svgWriter.flush()
+	}
+
+	@GetMapping("/schema")
+	fun generateEntityStructureSvg() : String {
+		return schemaSpyService.generateSchemaDocumentation().toFile().absolutePath
 	}
 
 	@GetMapping("/erm")
