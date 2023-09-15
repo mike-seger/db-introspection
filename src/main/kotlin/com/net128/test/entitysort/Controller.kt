@@ -6,25 +6,32 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-class Controller(private val entityScanner: EntityScanner, private val schemaSpyService: SchemaSpyService) {
+class Controller(private val entityScanner: EntityScanner, private val schemaSpyService: SchemaSpyService, val schemaScanner: SchemaScanner) {
 
 	@GetMapping
 	fun entities(): List<String> {
 		return entityScanner.getOrderedEntityClasses().map { it.simpleName }.filterNotNull().toList()
 	}
 
-	@GetMapping("/svg/entityStructure")
-	fun generateEntityStructureSvg(
-		@RequestParam("width", required = false, defaultValue = "800") width: Int,
-		@RequestParam("height", required = false, defaultValue = "600") height: Int,
-		response: HttpServletResponse
-	) {
-		response.contentType = "image/svg+xml"
-		response.characterEncoding = "UTF-8"
+	@GetMapping("/db/tables")
+	fun dbTables(): List<String> {
+		return schemaScanner.getSortedTableNames()
+	}
 
-		val svgWriter = response.writer
-		svgWriter.write(entityScanner.generateERM())
-		svgWriter.flush()
+	@GetMapping("/db/schema")
+	fun dbSchema(): String? {
+		return schemaScanner.getCurrentSchema()
+	}
+
+	@GetMapping("/db/erd")
+	fun dbErd(): String {
+		return schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+
+	@GetMapping("/entityStructure")
+	fun generateEntityStructure() : Map<String, Any> {
+		return entityScanner.getEntityStructure()
 	}
 
 	@GetMapping("/schema")

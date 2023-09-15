@@ -22,35 +22,32 @@ erDiagram
     MANUFACTURER only one to zero or more CAR : makes
 ```
 
-
-```plantuml
-@startuml
-  skinparam linetype ortho
-  skinparam packageStyle rectangle
-  skinparam shadowing false
-  skinparam class {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor Black
-  }
-  hide circle
-  class "User" as User1 {
-    - int id
-    - int age
-    - string name
-    + ([role]) roles()
-    + ([user_role]) user_roles()
-  }
-  class Role {
-    - int id
-    - string name
-  }
-  class "UserRole" as User1Role {
-    - int id
-    - int user_id
-    - int role_id
-  }
-  User1 ||-right-|{ User1Role
-  Role ||-left-|{ User1Role
-@enduml
+```mermaid
+erDiagram
+    ADDRESS {
+        string ID PK
+    }
+    CITY ||--o{ ADDRESS : references
+    A_THE_ENTITY {
+        string ID PK
+    }
+    B_THE_ENTITY {
+        string ID PK
+    }
+    CITY {
+        string ID PK
+    }
+    C_THE_ENTITY {
+        string ID PK
+    }
+    EMPLOYEE {
+        string ID PK
+    }
+    ADDRESS ||--o{ EMPLOYEE : references
+    F_THE_ENTITY {
+        string ID PK
+    }
+    Z_THE_ENTITY {
+        string ID PK
+}
 ```
