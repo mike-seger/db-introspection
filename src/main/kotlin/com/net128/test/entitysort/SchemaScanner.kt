@@ -84,7 +84,7 @@ class SchemaScanner(private val dataSource: DataSource) {
                     while (fkResultSet.next()) {
                         val fkTableName = fkResultSet.getString("PKTABLE_NAME")
                         val refTableName = fkResultSet.getString("FKTABLE_NAME")
-                        diagramBuilder.append("    $fkTableName ||--o{ $refTableName : references\n")
+                        diagramBuilder.append("    $fkTableName ||--o{ $refTableName : \n")
                     }
                 }
             }
