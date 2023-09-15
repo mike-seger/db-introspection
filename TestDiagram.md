@@ -6,7 +6,7 @@ erDiagram
         varchar street
         varchar city_id
     }
-    CITY ||--o{ ADDRESS : references
+    CITY ||--o{ ADDRESS : 
     A_THE_ENTITY {
         bigint id
         varchar name
@@ -27,14 +27,14 @@ erDiagram
         varchar class_nm
         int course_id
     }
-    COURSE ||--o{ CLASS : references
+    COURSE ||--o{ CLASS : 
     CLASSCOMMENT {
         int classcomment_id
         varchar classcomment_tx
         int score_int
         int roster_id
     }
-    ROSTER ||--o{ CLASSCOMMENT : references
+    ROSTER ||--o{ CLASSCOMMENT : 
     CLASSINSTANCE {
         int classinstance_id
         timestamp classinstance_dt
@@ -44,9 +44,9 @@ erDiagram
         int instructor_id
         int room_id
     }
-    CLASS ||--o{ CLASSINSTANCE : references
-    PERSON ||--o{ CLASSINSTANCE : references
-    ROOM ||--o{ CLASSINSTANCE : references
+    CLASS ||--o{ CLASSINSTANCE : 
+    PERSON ||--o{ CLASSINSTANCE : 
+    ROOM ||--o{ CLASSINSTANCE : 
     COURSE {
         int course_id
         varchar course_cd
@@ -62,7 +62,7 @@ erDiagram
         varchar name
         varchar address_id
     }
-    ADDRESS ||--o{ EMPLOYEE : references
+    ADDRESS ||--o{ EMPLOYEE : 
     F_THE_ENTITY {
         bigint id
         varchar name
@@ -81,8 +81,8 @@ erDiagram
         int person_id
         int role_id
     }
-    PERSON ||--o{ PERSONROLE : references
-    ROLE ||--o{ PERSONROLE : references
+    PERSON ||--o{ PERSONROLE : 
+    ROLE ||--o{ PERSONROLE : 
     ROLE {
         int role_id
         varchar role_cd
@@ -102,8 +102,8 @@ erDiagram
         int classinstance_id
         int person_id
     }
-    CLASSINSTANCE ||--o{ ROSTER : references
-    PERSON ||--o{ ROSTER : references
+    CLASSINSTANCE ||--o{ ROSTER : 
+    PERSON ||--o{ ROSTER : 
     Z_THE_ENTITY {
         bigint id
         varchar name
