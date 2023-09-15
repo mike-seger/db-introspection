@@ -1,56 +1,97 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id 'org.springframework.boot' version '2.7.15'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.jetbrains.kotlin.jvm' version '1.6.21'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
-	id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
-}
+    id 'org.springframework.boot' version '2.7.15'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
 
-ext {
-	schemaSpyVersion = "6.2.4"
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 group = 'com.net128.test'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
+}
+
+ext {
+    schemaSpyVersion = "6.2.4"
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+}
+
+configurations {
+    fullSchemaSpy
+    extractDbDrivers
 }
 
 dependencies {
-	implementation "org.schemaspy:schemaspy:${schemaSpyVersion}"
-	//implementation 'commons-cli:commons-cli:1.5.0'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	runtimeOnly 'com.h2database:h2'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //implementation 'commons-cli:commons-cli:1.5.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    fullSchemaSpy "org.schemaspy:schemaspy:${schemaSpyVersion}"
+    extractDbDrivers 'com.h2database:h2'
+}
+
+application {
+    mainClassName = 'org.schemaspy.Main'
+}
+
+//shadowJar {
+//    configurations = [project.configurations.fullSchemaSpy]
+//    baseName = 'schemaspy'
+//    version = schemaSpyVersion
+//    classifier = 'fat'
+//}
+
+shadowJar {
+    configurations = [project.configurations.fullSchemaSpy]
+    archiveBaseName.set('schemaspy')
+    archiveVersion.set(schemaSpyVersion)
+    archiveClassifier.set('fat')
+
+    mergeServiceFiles() // Merges standard service files
+
+    // Handle the merging of spring.factories files specifically
+    append('META-INF/spring.factories')
 }
 
 tasks.withType(KotlinCompile) {
-	kotlinOptions {
-		freeCompilerArgs += '-Xjsr305=strict'
-		jvmTarget = '11'
-	}
+    kotlinOptions {
+        freeCompilerArgs += '-Xjsr305=strict'
+        jvmTarget = '11'
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
-tasks.register('extractSchemaSpy', Copy) {
-	def jarFile = configurations.runtimeClasspath.files.find {
-		it.name.endsWith("schemaspy-${schemaSpyVersion}.jar") }
-	def destinationDirectory = file("runtime")
-	destinationDirectory.mkdirs()
-	from jarFile
-	into destinationDirectory
+task copyFatJarToRuntime(type: Copy) {
+    from shadowJar.outputs.files.singleFile
+    into 'runtime'
 }
+
+tasks.register('extractDbDrivers', Copy) {
+    def jarFile = configurations.extractDbDrivers.files.find {
+        it.name.startsWith("h2") }
+    def destinationDirectory = file("runtime")
+    destinationDirectory.mkdirs()
+    from jarFile
+    into destinationDirectory
+}
+
+copyFatJarToRuntime.dependsOn shadowJar

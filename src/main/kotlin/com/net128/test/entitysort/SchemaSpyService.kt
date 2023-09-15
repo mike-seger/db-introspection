@@ -1,19 +1,14 @@
 package com.net128.test.entitysort
 
-import org.schemaspy.Main
-import org.schemaspy.cli.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class SchemaSpyService(
-    private val schemaSpyRunner: SchemaSpyRunner,
-
     @Value("\${spring.datasource.url}")
     private val dbUrl: String,
 
@@ -26,51 +21,53 @@ class SchemaSpyService(
     @Value("\${spring.datasource.driver-class-name}")
     private val dbDriver: String)  {
 
-    fun callSchemaSpy() {
+    fun generateSchemaDocumentation() : Path {
+        val outputDirectory = Files.createTempDirectory("schemaspy-output-")
+      //  val currentClasspath = System.getProperty("java.class.path").replace(" ", "%20")
+      //  val tempFile = Files.createTempFile("classpath", ".txt").toFile()
+        val schemaSpyJar = File("runtime").findMatchingFile("schemaspy-.*-fat.jar".toRegex())?.absolutePath ?:""
+        val driverJar = File("runtime").findMatchingFile("h2.*.jar".toRegex())?.absolutePath ?:""
+
+//        var h2Properties = Thread.currentThread().contextClassLoader.getResourceAsStream("h2.properties")?.use {
+//            it.reader().readText() } ?: throw IllegalArgumentException("Resource not found!")
+//        h2Properties = h2Properties.replace("connectionSpec=.*".toRegex(RegexOption.MULTILINE), "connectionSpec=$dbUrl")
+//
+//        val h2PropertiesFile = File.createTempFile("h2PropertiesFile", ".properties")
+//        h2PropertiesFile.deleteOnExit()
+//
+//        println(h2Properties)
+        //CONNECTIONSPEC
+        //   tempFile.writeText("$schemaSpyJar:$currentClasspath")
+     //   tempFile.deleteOnExit()
         // Get the class loader for the main class
         // Create the ProcessBuilder object
-        val processBuilder = ProcessBuilder("java", "-jar", "schemaspy-<version>.jar", "-c", dbUrl, "-u", dbUsername, "-p", dbPassword, "-o", "html")
+        val processBuilder = ProcessBuilder("java", "-jar", schemaSpyJar,
+            "-t", guessDbTypeFromUrl(dbUrl), "-dp", driverJar, "-c", dbUrl, "-u", dbUsername, "-p", dbPassword, "-o", "html")
 
+        processBuilder.inheritIO()
         // Start the process
         val process = processBuilder.start()
 
-        // Get the input stream from the process
-        val inputStream = process.inputStream
-
-        // Get the output stream from the process
-        val outputStream = process.outputStream
-
-        // Write the connection string, username, password, and output format to the output stream
-        outputStream.write("c=$dbUrl\n".toByteArray())
-        outputStream.write("u=$dbUsername\n".toByteArray())
-        outputStream.write("p=$dbPassword\n".toByteArray())
-        outputStream.write("o=html\n".toByteArray())
-
-        // Close the output stream
-        outputStream.close()
-
         // Read the output from the input stream
-        val output = inputStream.bufferedReader().readText()
-
-        // Close the input stream
-        inputStream.close()
-
-        // Print the output
+        val output = process.inputStream.bufferedReader().readText()
+        val errors = process.errorStream.bufferedReader().readText()
         println(output)
+        println(errors)
+        return outputDirectory
     }
 
-    fun generateSchemaDocumentation(): Path {
+    fun generateSchemaDocumentation1(): Path {
         val outputDirectory = Files.createTempDirectory("schemaspy-output-")
         val args = arrayOf(
             "-t", "h2",
          //   "-dp", dbDriver,
-            "-db", extractDbNameFromUrl(dbUrl),
+            "-db", guessDbTypeFromUrl(dbUrl),
             "-u", dbUsername,
             "-p", dbPassword,
             "-s", "S0",
             "-o", outputDirectory.toString()
         )
-        Main.main(*args)
+        //Main.main(*args)
         return outputDirectory
     }
 
@@ -100,9 +97,12 @@ class SchemaSpyService(
         return outputDirectory
     }*/
 
+    fun File.findMatchingFile(pattern: Regex): File? {
+        return this.listFiles()?.find { it.isFile && pattern.matches(it.name) }
+    }
+
     private fun extractDbNameFromUrl(url: String): String {
-        val parts = url.split("/")
-        return parts.last()
+        return url.split("/").last().split(";").first()
     }
 
     private fun guessDbTypeFromUrl(url: String): String {
