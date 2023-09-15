@@ -25,7 +25,7 @@ class Controller(private val entityScanner: EntityScanner, private val schemaSpy
 
 	@GetMapping("/db/erd")
 	fun dbErd(): String {
-		return schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
+		return "```mermaid\n${schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
 	}
 
 

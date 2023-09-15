@@ -42,21 +42,34 @@ class SchemaScanner(private val dataSource: DataSource) {
                 val schemaName = parts[0]
                 val table = parts[1]
 
-                // Fetch primary key
+                // Fetch all columns and identify primary keys
+                val primaryKeys = mutableSetOf<String>()
                 metaData.getPrimaryKeys(null, schemaName, table).use { pkResultSet ->
                     while (pkResultSet.next()) {
-                        val columnName = pkResultSet.getString("COLUMN_NAME")
-                        diagramBuilder.append("    $table {\n        string $columnName PK\n    }\n")
+                        primaryKeys.add(pkResultSet.getString("COLUMN_NAME"))
                     }
                 }
+
+                // Append all columns
+                diagramBuilder.append("    $table {\n")
+                metaData.getColumns(null, schemaName, table, null).use { columnResultSet ->
+                    while (columnResultSet.next()) {
+                        val columnName = columnResultSet.getString("COLUMN_NAME")
+                        val columnType = columnResultSet.getString("TYPE_NAME")
+                        if (primaryKeys.contains(columnName)) {
+                            diagramBuilder.append("        $columnType $columnName PK\n")
+                        } else {
+                            diagramBuilder.append("        $columnType $columnName\n")
+                        }
+                    }
+                }
+                diagramBuilder.append("    }\n")
 
                 // Fetch foreign keys
                 metaData.getImportedKeys(null, schemaName, table).use { fkResultSet ->
                     while (fkResultSet.next()) {
                         val fkTableName = fkResultSet.getString("PKTABLE_NAME")
-                        val fkColumnName = fkResultSet.getString("PKCOLUMN_NAME")
                         val refTableName = fkResultSet.getString("FKTABLE_NAME")
-                        val refColumnName = fkResultSet.getString("FKCOLUMN_NAME")
                         diagramBuilder.append("    $fkTableName ||--o{ $refTableName : references\n")
                     }
                 }
