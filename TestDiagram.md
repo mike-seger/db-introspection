@@ -2,41 +2,41 @@
 erDiagram
     ADDRESS {
         BIGINT ID PK
-        VARCHAR ADDRESS_ID
-        VARCHAR STREET
-        VARCHAR CITY_ID
+        CHARACTER VARYING ADDRESS_ID
+        CHARACTER VARYING STREET
+        CHARACTER VARYING CITY_ID
     }
     CITY ||--o{ ADDRESS : references
     A_THE_ENTITY {
         BIGINT ID PK
-        VARCHAR NAME
+        CHARACTER VARYING NAME
     }
     B_THE_ENTITY {
         BIGINT ID PK
-        VARCHAR NAME
+        CHARACTER VARYING NAME
     }
     CITY {
         BIGINT ID PK
-        VARCHAR CITY_ID
-        VARCHAR NAME
+        CHARACTER VARYING CITY_ID
+        CHARACTER VARYING NAME
     }
     C_THE_ENTITY {
         BIGINT ID PK
-        VARCHAR NAME
+        CHARACTER VARYING NAME
     }
     EMPLOYEE {
         BIGINT ID PK
-        VARCHAR NAME
-        VARCHAR ADDRESS_ID
+        CHARACTER VARYING NAME
+        CHARACTER VARYING ADDRESS_ID
     }
     ADDRESS ||--o{ EMPLOYEE : references
     F_THE_ENTITY {
         BIGINT ID PK
-        VARCHAR NAME
+        CHARACTER VARYING NAME
     }
     Z_THE_ENTITY {
         BIGINT ID PK
-        VARCHAR NAME
+        CHARACTER VARYING NAME
     }
 
 ```

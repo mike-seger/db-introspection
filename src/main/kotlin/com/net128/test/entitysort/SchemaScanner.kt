@@ -42,41 +42,6 @@ class SchemaScanner(private val dataSource: DataSource) {
                 val schemaName = parts[0]
                 val table = parts[1]
 
-                // Fetch primary key
-                metaData.getPrimaryKeys(null, schemaName, table).use { pkResultSet ->
-                    while (pkResultSet.next()) {
-                        val columnName = pkResultSet.getString("COLUMN_NAME")
-                        diagramBuilder.append("    $table {\n        string $columnName PK\n    }\n")
-                    }
-                }
-
-                // Fetch foreign keys
-                metaData.getImportedKeys(null, schemaName, table).use { fkResultSet ->
-                    while (fkResultSet.next()) {
-                        val fkTableName = fkResultSet.getString("PKTABLE_NAME")
-                        val fkColumnName = fkResultSet.getString("PKCOLUMN_NAME")
-                        val refTableName = fkResultSet.getString("FKTABLE_NAME")
-                        val refColumnName = fkResultSet.getString("FKCOLUMN_NAME")
-                        diagramBuilder.append("    $fkTableName ||--o{ $refTableName : references\n")
-                    }
-                }
-            }
-
-            return diagramBuilder.toString()
-        }
-    }
-
-    fun generateMermaidERDiagram1(tableNames: List<String>): String {
-        dataSource.connection.use { connection ->
-            val metaData = connection.metaData
-            val diagramBuilder = StringBuilder("erDiagram\n")
-
-            tableNames.forEach { tableName ->
-                // Split schema and table name
-                val parts = tableName.split(".")
-                val schemaName = parts[0]
-                val table = parts[1]
-
                 // Fetch all columns and identify primary keys
                 val primaryKeys = mutableSetOf<String>()
                 metaData.getPrimaryKeys(null, schemaName, table).use { pkResultSet ->
