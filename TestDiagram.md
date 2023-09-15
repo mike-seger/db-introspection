@@ -1,4 +1,13 @@
-````plantuml
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
+
+
+```plantuml
 @startuml
   skinparam linetype ortho
   skinparam packageStyle rectangle
