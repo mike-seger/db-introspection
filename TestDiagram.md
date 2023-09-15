@@ -1,112 +1,112 @@
 ```mermaid
 erDiagram
     ADDRESS {
-        BIGINT ID PK
-        VARCHAR ADDRESS_ID
-        VARCHAR STREET
-        VARCHAR CITY_ID
+        bigint id
+        varchar address_id
+        varchar street
+        varchar city_id
     }
     CITY ||--o{ ADDRESS : references
     A_THE_ENTITY {
-        BIGINT ID PK
-        VARCHAR NAME
+        bigint id
+        varchar name
     }
     B_THE_ENTITY {
-        BIGINT ID PK
-        VARCHAR NAME
+        bigint id
+        varchar name
     }
     CITY {
-        BIGINT ID PK
-        VARCHAR CITY_ID
-        VARCHAR NAME
+        bigint id
+        varchar city_id
+        varchar name
     }
     CLASS {
-        INT CLASS_ID PK
-        VARCHAR CLASS_CD
-        VARCHAR CLASS_DESC
-        VARCHAR CLASS_NM
-        INT COURSE_ID
+        int class_id
+        varchar class_cd
+        varchar class_desc
+        varchar class_nm
+        int course_id
     }
     COURSE ||--o{ CLASS : references
     CLASSCOMMENT {
-        INT CLASSCOMMENT_ID PK
-        VARCHAR CLASSCOMMENT_TX
-        INT SCORE_INT
-        INT ROSTER_ID
+        int classcomment_id
+        varchar classcomment_tx
+        int score_int
+        int roster_id
     }
     ROSTER ||--o{ CLASSCOMMENT : references
     CLASSINSTANCE {
-        INT CLASSINSTANCE_ID PK
-        TIMESTAMP CLASSINSTANCE_DT
-        INT CLASSINSTANCE_MINS
-        VARCHAR CLASSINSTANCE_NOTE
-        INT CLASS_ID
-        INT INSTRUCTOR_ID
-        INT ROOM_ID
+        int classinstance_id
+        timestamp classinstance_dt
+        int classinstance_mins
+        varchar classinstance_note
+        int class_id
+        int instructor_id
+        int room_id
     }
     CLASS ||--o{ CLASSINSTANCE : references
     PERSON ||--o{ CLASSINSTANCE : references
     ROOM ||--o{ CLASSINSTANCE : references
     COURSE {
-        INT COURSE_ID PK
-        VARCHAR COURSE_CD
-        VARCHAR COURSE_DESC
-        VARCHAR COURSE_NM
+        int course_id
+        varchar course_cd
+        varchar course_desc
+        varchar course_nm
     }
     C_THE_ENTITY {
-        BIGINT ID PK
-        VARCHAR NAME
+        bigint id
+        varchar name
     }
     EMPLOYEE {
-        BIGINT ID PK
-        VARCHAR NAME
-        VARCHAR ADDRESS_ID
+        bigint id
+        varchar name
+        varchar address_id
     }
     ADDRESS ||--o{ EMPLOYEE : references
     F_THE_ENTITY {
-        BIGINT ID PK
-        VARCHAR NAME
+        bigint id
+        varchar name
     }
     PERSON {
-        INT PERSON_ID PK
-        INT ACTIVE_IND
-        VARCHAR EMAIL
-        VARCHAR FIRSTNAME
-        VARCHAR LASTNAME
-        VARCHAR PASSWORD
-        NUMERIC PHONE_SMS
-        VARCHAR USERNAME
+        int person_id
+        int active_ind
+        varchar email
+        varchar firstname
+        varchar lastname
+        varchar password
+        numeric phone_sms
+        varchar username
     }
     PERSONROLE {
-        INT PERSON_ID PK
-        INT ROLE_ID PK
+        int person_id
+        int role_id
     }
     PERSON ||--o{ PERSONROLE : references
     ROLE ||--o{ PERSONROLE : references
     ROLE {
-        INT ROLE_ID PK
-        VARCHAR ROLE_CD
-        VARCHAR ROLE_NM
+        int role_id
+        varchar role_cd
+        varchar role_nm
     }
     ROOM {
-        INT ROOM_ID PK
-        VARCHAR ROOM_CD
-        VARCHAR ROOM_DESC
-        INT FLOOR_NBR
-        VARCHAR ROOM_NM
-        INT ROOM_SEATS_NBR
+        int room_id
+        varchar room_cd
+        varchar room_desc
+        int floor_nbr
+        varchar room_nm
+        int room_seats_nbr
     }
     ROSTER {
-        INT ROSTER_ID PK
-        BOOLEAN ATTEND_IND
-        INT CLASSINSTANCE_ID
-        INT PERSON_ID
+        int roster_id
+        boolean attend_ind
+        int classinstance_id
+        int person_id
     }
     CLASSINSTANCE ||--o{ ROSTER : references
     PERSON ||--o{ ROSTER : references
     Z_THE_ENTITY {
-        BIGINT ID PK
-        VARCHAR NAME
+        bigint id
+        varchar name
     }
 
 ```

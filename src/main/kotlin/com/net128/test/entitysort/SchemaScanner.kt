@@ -40,7 +40,7 @@ class SchemaScanner(private val dataSource: DataSource) {
         )
 
         val substitutedType = substitutions[type] ?: type
-        return substitutedType.replace(" ", "_")
+        return substitutedType.replace(" ", "_").lowercase()
     }
 
     fun generateMermaidERDiagram(tableNames: List<String>): String {
@@ -66,7 +66,7 @@ class SchemaScanner(private val dataSource: DataSource) {
                 diagramBuilder.append("    $table {\n")
                 metaData.getColumns(null, schemaName, table, null).use { columnResultSet ->
                     while (columnResultSet.next()) {
-                        val columnName = columnResultSet.getString("COLUMN_NAME")
+                        val columnName = columnResultSet.getString("COLUMN_NAME").lowercase()
                         var columnType = columnResultSet.getString("TYPE_NAME")
                         columnType = processDataType(columnType)
 
