@@ -1,42 +1,30 @@
 ```mermaid
 erDiagram
     ADDRESS {
-        BIGINT ID PK
-        CHARACTER VARYING ADDRESS_ID
-        CHARACTER VARYING STREET
-        CHARACTER VARYING CITY_ID
+        string ID PK
     }
     CITY ||--o{ ADDRESS : references
     A_THE_ENTITY {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
+        string ID PK
     }
     B_THE_ENTITY {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
+        string ID PK
     }
     CITY {
-        BIGINT ID PK
-        CHARACTER VARYING CITY_ID
-        CHARACTER VARYING NAME
+        string ID PK
     }
     C_THE_ENTITY {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
+        string ID PK
     }
     EMPLOYEE {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
-        CHARACTER VARYING ADDRESS_ID
+        string ID PK
     }
     ADDRESS ||--o{ EMPLOYEE : references
     F_THE_ENTITY {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
+        string ID PK
     }
     Z_THE_ENTITY {
-        BIGINT ID PK
-        CHARACTER VARYING NAME
+        string ID PK
     }
 
 ```
