@@ -1,5 +1,0 @@
-date=2023-09-15 23:49:49+0200
-os=Mac OS X 11.3.1
-schemaspy-version=IDE
-schemaspy-build=IDE
-renderer=Graphviz dot 8.1.0 
