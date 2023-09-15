@@ -34,6 +34,7 @@ class SchemaScanner(private val dataSource: DataSource) {
     fun processDataType(type: String): String {
         val substitutions = mapOf(
             "CHARACTER VARYING" to "VARCHAR",
+            "INTEGER" to "INT",
             // Add other substitutions as needed
             // e.g., "NUMERIC" to "DECIMAL"
         )
