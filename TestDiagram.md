@@ -11,6 +11,14 @@ erDiagram
         bigint id
         varchar name
     }
+    BOOK {
+        bigint id
+        varchar author
+        varchar isbn
+        varchar title
+        bigint library_id
+    }
+    LIBRARY ||--o{ BOOK : ""
     B_THE_ENTITY {
         bigint id
         varchar name
@@ -20,69 +28,48 @@ erDiagram
         varchar city_id
         varchar name
     }
-    CLASS {
-        int class_id
-        varchar class_cd
-        varchar class_desc
-        varchar class_nm
-        int course_id
+    CLUB {
+        bigint id
+        varchar name
     }
-    COURSE ||--o{ CLASS : ""
-    CLASSCOMMENT {
-        int classcomment_id
-        varchar classcomment_tx
-        int score_int
-        int roster_id
-    }
-    ROSTER ||--o{ CLASSCOMMENT : ""
-    CLASSINSTANCE {
-        int classinstance_id
-        timestamp classinstance_dt
-        int classinstance_mins
-        varchar classinstance_note
-        int class_id
-        int instructor_id
-        int room_id
-    }
-    CLASS ||--o{ CLASSINSTANCE : ""
-    PERSON ||--o{ CLASSINSTANCE : ""
-    ROOM ||--o{ CLASSINSTANCE : ""
     COURSE {
-        int course_id
-        varchar course_cd
-        varchar course_desc
-        varchar course_nm
+        bigint id
+        int credits
+        varchar description
+        varchar name
+        bigint department_id
     }
+    DEPARTMENT ||--o{ COURSE : ""
     C_THE_ENTITY {
         bigint id
         varchar name
     }
+    DEPARTMENT {
+        bigint id
+        varchar name
+        bigint faculty_id
+    }
+    FACULTY ||--o{ DEPARTMENT : ""
     EMPLOYEE {
         bigint id
         varchar name
         varchar address_id
     }
     ADDRESS ||--o{ EMPLOYEE : ""
+    FACULTY {
+        bigint id
+        varchar name
+        bigint university_id
+    }
+    UNIVERSITY ||--o{ FACULTY : ""
     F_THE_ENTITY {
         bigint id
         varchar name
     }
-    PERSON {
-        int person_id
-        int active_ind
-        varchar email
-        varchar firstname
-        varchar lastname
-        varchar password
-        numeric phone_sms
-        varchar username
+    LIBRARY {
+        bigint id
+        varchar name
     }
-    PERSONROLE {
-        int person_id
-        int role_id
-    }
-    PERSON ||--o{ PERSONROLE : ""
-    ROLE ||--o{ PERSONROLE : ""
     POST {
         bigint id
         varchar title
@@ -105,28 +92,47 @@ erDiagram
     }
     POST ||--o{ POST_TAG : ""
     TAG ||--o{ POST_TAG : ""
-    ROLE {
-        int role_id
-        varchar role_cd
-        varchar role_nm
+    PROFESSOR {
+        bigint id
+        varchar first_name
+        varchar last_name
+        varchar specialization
     }
-    ROOM {
-        int room_id
-        varchar room_cd
-        varchar room_desc
-        int floor_nbr
-        varchar room_nm
-        int room_seats_nbr
+    STAFF {
+        bigint id
+        varchar first_name
+        varchar last_name
+        varchar position
+        double_precision salary
     }
-    ROSTER {
-        int roster_id
-        boolean attend_ind
-        int classinstance_id
-        int person_id
+    STUDENT {
+        bigint id
+        varchar date_of_birth
+        varchar email
+        varchar enrollment_date
+        varchar first_name
+        double_precision grade_average
+        varchar last_name
+        bigint advisor_id
     }
-    CLASSINSTANCE ||--o{ ROSTER : ""
-    PERSON ||--o{ ROSTER : ""
+    PROFESSOR ||--o{ STUDENT : ""
+    STUDENT_CLUB {
+        bigint club_id
+        bigint student_id
+    }
+    CLUB ||--o{ STUDENT_CLUB : ""
+    STUDENT ||--o{ STUDENT_CLUB : ""
+    STUDENT_COURSE {
+        bigint student_id
+        bigint course_id
+    }
+    COURSE ||--o{ STUDENT_COURSE : ""
+    STUDENT ||--o{ STUDENT_COURSE : ""
     TAG {
+        bigint id
+        varchar name
+    }
+    UNIVERSITY {
         bigint id
         varchar name
     }
