@@ -19,7 +19,7 @@ class Controller(private val entityScanner: EntityScanner, val schemaScanner: Sc
 	}
 
 	@GetMapping("/db/erd")
-	fun dbErd(@RequestParam markdown: Boolean = true): String {
+	fun dbErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
 		if(markdown)
 			return "```mermaid\n${schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
 		return schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())

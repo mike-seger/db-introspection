@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
     ADDRESS {
         bigint id
@@ -133,3 +134,5 @@ erDiagram
         bigint id
         varchar name
     }
+
+```
