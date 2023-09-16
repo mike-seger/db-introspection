@@ -1,1 +1,1 @@
-{"timestamp":"2023-09-16T22:02:30.870+00:00","status":404,"error":"Not Found","path":"/db/erd"}
+{"timestamp":"2023-09-16T23:32:56.987+00:00","status":404,"error":"Not Found","path":"/db/erd"}
