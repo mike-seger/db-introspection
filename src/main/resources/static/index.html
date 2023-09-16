@@ -18,7 +18,7 @@
 <script>
     window.onload = function() {
         mermaid.initialize({ startOnLoad: true })
-        fetch('/db/erd?markdown=false')
+        fetch('/mermaid/erd?markdown=false')
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");

@@ -1,4 +1,4 @@
-package com.net128.test.entitysort.model.uni
+package com.net128.test.entitysort.model
 
 import javax.persistence.*
 

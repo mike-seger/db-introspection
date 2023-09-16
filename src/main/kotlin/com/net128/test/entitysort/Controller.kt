@@ -6,7 +6,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @Suppress("unused")
 @RestController
-class Controller(private val entityScanner: EntityScanner, val schemaScanner: SchemaScanner) {
+class Controller(
+	private val entityScanner: EntityScanner,
+	private val schemaScanner: SchemaScanner,
+	private val mermaidService: MermaidService,
+	private val dbDiagramService: DbDiagramService,
+	private val graphVizService: GraphVizService,
+) {
 
 	@GetMapping("/db/tables")
 	fun dbTables(): List<String> {
@@ -18,11 +24,21 @@ class Controller(private val entityScanner: EntityScanner, val schemaScanner: Sc
 		return schemaScanner.getCurrentSchema()
 	}
 
-	@GetMapping("/db/erd")
-	fun dbErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
+	@GetMapping("/mermaid/erd")
+	fun mermaidErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
 		if(markdown)
-			return "```mermaid\n${schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
-		return schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
+			return "```mermaid\n${mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
+		return mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+	@GetMapping("/graphviz/dot")
+	fun graphVizDot(): String {
+		return graphVizService.generateGraphvizERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+	@GetMapping("/dbml/code")
+	fun dbMlCode(): String {
+		return dbDiagramService.generateDbDiagramERDiagram(schemaScanner.getSortedTableNames())
 	}
 
 	@GetMapping("/jpa/entities")

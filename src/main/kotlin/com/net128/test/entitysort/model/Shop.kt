@@ -1,9 +1,9 @@
-package com.net128.test.entitysort.model.shop
+package com.net128.test.entitysort.model
 
 import javax.persistence.*
 
 @Entity
-@Table(name = "`user`")
+@Table(name = "`USER`")
 data class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -109,7 +109,7 @@ data class CartItem(
 )
 
 @Entity
-@Table(name = "`order`")
+@Table(name = "`ORDER`")
 data class Order(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
