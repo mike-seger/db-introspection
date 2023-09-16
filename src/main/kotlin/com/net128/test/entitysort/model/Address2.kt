@@ -3,8 +3,8 @@ package com.net128.test.entitysort.model
 import javax.persistence.*
 
 @Entity
-@Table(name = "address")
-class Address (
+@Table(name = "address2")
+class Address2 (
     @Column(name = "address_id", nullable = false, unique = true)
     var addressId: String,
 

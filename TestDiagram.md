@@ -2,15 +2,20 @@
 erDiagram
     ADDRESS {
         bigint id
+        varchar city
+        varchar state
+        varchar street
+        varchar zip_code
+        bigint country_id
+    }
+    COUNTRY ||--o{ ADDRESS : ""
+    ADDRESS2 {
+        bigint id
         varchar address_id
         varchar street
         varchar city_id
     }
-    CITY ||--o{ ADDRESS : ""
-    A_THE_ENTITY {
-        bigint id
-        varchar name
-    }
+    CITY ||--o{ ADDRESS2 : ""
     BOOK {
         bigint id
         varchar author
@@ -19,7 +24,20 @@ erDiagram
         bigint library_id
     }
     LIBRARY ||--o{ BOOK : ""
-    B_THE_ENTITY {
+    CART {
+        bigint id
+        bigint user_id
+    }
+    user ||--o{ CART : ""
+    CART_ITEM {
+        bigint id
+        int quantity
+        bigint cart_id
+        bigint product_id
+    }
+    CART ||--o{ CART_ITEM : ""
+    PRODUCT ||--o{ CART_ITEM : ""
+    CATEGORY {
         bigint id
         varchar name
     }
@@ -32,6 +50,10 @@ erDiagram
         bigint id
         varchar name
     }
+    COUNTRY {
+        bigint id
+        varchar name
+    }
     COURSE {
         bigint id
         int credits
@@ -40,64 +62,95 @@ erDiagram
         bigint department_id
     }
     DEPARTMENT ||--o{ COURSE : ""
-    C_THE_ENTITY {
-        bigint id
-        varchar name
-    }
     DEPARTMENT {
         bigint id
         varchar name
         bigint faculty_id
     }
     FACULTY ||--o{ DEPARTMENT : ""
+    DISCOUNT {
+        bigint id
+        varchar code
+        varchar end_date
+        double_precision percentage
+        varchar start_date
+    }
+    DISCOUNT_PRODUCT {
+        bigint discount_id
+        bigint product_id
+    }
+    DISCOUNT ||--o{ DISCOUNT_PRODUCT : ""
+    PRODUCT ||--o{ DISCOUNT_PRODUCT : ""
     EMPLOYEE {
         bigint id
         varchar name
         varchar address_id
     }
-    ADDRESS ||--o{ EMPLOYEE : ""
+    ADDRESS2 ||--o{ EMPLOYEE : ""
     FACULTY {
         bigint id
         varchar name
         bigint university_id
     }
     UNIVERSITY ||--o{ FACULTY : ""
-    F_THE_ENTITY {
+    INVENTORY {
         bigint id
-        varchar name
+        int stock_count
+        bigint product_id
     }
+    PRODUCT ||--o{ INVENTORY : ""
     LIBRARY {
         bigint id
         varchar name
     }
-    POST {
+    ORDER_ITEM {
         bigint id
-        varchar title
+        int quantity
+        bigint order_id
+        bigint product_id
     }
-    POST_COMMENT {
+    PRODUCT ||--o{ ORDER_ITEM : ""
+    order ||--o{ ORDER_ITEM : ""
+    PAYMENT {
         bigint id
-        varchar review
-        bigint post_id
+        double_precision amount
+        varchar date
+        varchar payment_type
+        bigint order_id
     }
-    POST ||--o{ POST_COMMENT : ""
-    POST_DETAILS {
+    order ||--o{ PAYMENT : ""
+    PRODUCT {
         bigint id
-        varchar created_by
-        timestamp created_on
+        varchar description
+        varchar name
+        double_precision price
+        bigint category_id
+        bigint supplier_id
     }
-    POST ||--o{ POST_DETAILS : ""
-    POST_TAG {
-        bigint post_id
-        bigint tag_id
-    }
-    POST ||--o{ POST_TAG : ""
-    TAG ||--o{ POST_TAG : ""
+    CATEGORY ||--o{ PRODUCT : ""
+    SUPPLIER ||--o{ PRODUCT : ""
     PROFESSOR {
         bigint id
         varchar first_name
         varchar last_name
         varchar specialization
     }
+    REVIEW {
+        bigint id
+        varchar comment
+        int rating
+        bigint product_id
+        bigint user_id
+    }
+    PRODUCT ||--o{ REVIEW : ""
+    user ||--o{ REVIEW : ""
+    SHIPMENT {
+        bigint id
+        varchar status
+        varchar tracking_number
+        bigint order_id
+    }
+    order ||--o{ SHIPMENT : ""
     STAFF {
         bigint id
         varchar first_name
@@ -128,7 +181,7 @@ erDiagram
     }
     COURSE ||--o{ STUDENT_COURSE : ""
     STUDENT ||--o{ STUDENT_COURSE : ""
-    TAG {
+    SUPPLIER {
         bigint id
         varchar name
     }
@@ -136,9 +189,40 @@ erDiagram
         bigint id
         varchar name
     }
-    Z_THE_ENTITY {
+    USER_PROFILE {
         bigint id
-        varchar name
+        varchar date_of_birth
+        varchar first_name
+        varchar last_name
+        bigint address_id
     }
+    ADDRESS ||--o{ USER_PROFILE : ""
+    WISHLIST {
+        bigint id
+        bigint user_id
+    }
+    user ||--o{ WISHLIST : ""
+    WISHLIST_PRODUCT {
+        bigint wishlist_id
+        bigint product_id
+    }
+    PRODUCT ||--o{ WISHLIST_PRODUCT : ""
+    WISHLIST ||--o{ WISHLIST_PRODUCT : ""
+    order {
+        bigint id
+        varchar date
+        varchar status
+        double_precision total_amount
+        bigint user_id
+    }
+    user ||--o{ order : ""
+    user {
+        bigint id
+        varchar email
+        varchar password
+        varchar username
+        bigint profile_id
+    }
+    USER_PROFILE ||--o{ user : ""
 
 ```

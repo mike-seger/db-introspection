@@ -10,5 +10,5 @@ class Employee (
 
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @ManyToOne
-    var address: Address
+    var address2: Address2
 ) : Identifiable()
