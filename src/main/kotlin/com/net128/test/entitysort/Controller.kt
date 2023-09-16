@@ -1,17 +1,12 @@
-package com.net128.test.entitysort;
+package com.net128.test.entitysort
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import javax.servlet.http.HttpServletResponse
 
+@Suppress("unused")
 @RestController
-class Controller(private val entityScanner: EntityScanner, private val schemaSpyService: SchemaSpyService, val schemaScanner: SchemaScanner) {
-
-	@GetMapping
-	fun entities(): List<String> {
-		return entityScanner.getOrderedEntityClasses().map { it.simpleName }.filterNotNull().toList()
-	}
+class Controller(private val entityScanner: EntityScanner, val schemaScanner: SchemaScanner) {
 
 	@GetMapping("/db/tables")
 	fun dbTables(): List<String> {
@@ -24,23 +19,19 @@ class Controller(private val entityScanner: EntityScanner, private val schemaSpy
 	}
 
 	@GetMapping("/db/erd")
-	fun dbErd(): String {
-		return "```mermaid\n${schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
+	fun dbErd(@RequestParam markdown: Boolean = true): String {
+		if(markdown)
+			return "```mermaid\n${schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
+		return schemaScanner.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
 	}
 
-
-	@GetMapping("/entityStructure")
-	fun generateEntityStructure() : Map<String, Any> {
-		return entityScanner.getEntityStructure()
+	@GetMapping("/jpa/entities")
+	fun jpaEntities(): List<String> {
+		return entityScanner.getOrderedEntityClasses().mapNotNull { it.simpleName }.toList()
 	}
 
-	@GetMapping("/schema")
-	fun generateEntityStructureSvg() : String {
-		return schemaSpyService.generateSchemaDocumentation().toFile().absolutePath
-	}
-
-	@GetMapping("/erm")
-	fun erm(): Map<String, Any> {
+	@GetMapping("/jpa/structure")
+	fun jpaStructure() : Map<String, Any> {
 		return entityScanner.getEntityStructure()
 	}
 }

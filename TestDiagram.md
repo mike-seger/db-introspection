@@ -1,4 +1,3 @@
-```mermaid
 erDiagram
     ADDRESS {
         bigint id
@@ -83,6 +82,28 @@ erDiagram
     }
     PERSON ||--o{ PERSONROLE : ""
     ROLE ||--o{ PERSONROLE : ""
+    POST {
+        bigint id
+        varchar title
+    }
+    POST_COMMENT {
+        bigint id
+        varchar review
+        bigint post_id
+    }
+    POST ||--o{ POST_COMMENT : ""
+    POST_DETAILS {
+        bigint id
+        varchar created_by
+        timestamp created_on
+    }
+    POST ||--o{ POST_DETAILS : ""
+    POST_TAG {
+        bigint post_id
+        bigint tag_id
+    }
+    POST ||--o{ POST_TAG : ""
+    TAG ||--o{ POST_TAG : ""
     ROLE {
         int role_id
         varchar role_cd
@@ -104,9 +125,11 @@ erDiagram
     }
     CLASSINSTANCE ||--o{ ROSTER : ""
     PERSON ||--o{ ROSTER : ""
+    TAG {
+        bigint id
+        varchar name
+    }
     Z_THE_ENTITY {
         bigint id
         varchar name
     }
-
-```
