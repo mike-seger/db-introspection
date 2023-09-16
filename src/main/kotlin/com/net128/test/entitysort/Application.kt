@@ -13,5 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 class EntitysortApplication
 
 fun main(args: Array<String>) {
+	System.setProperty("polyglot.engine.WarnInterpreterOnly", "false")
 	runApplication<EntitysortApplication>(*args)
 }

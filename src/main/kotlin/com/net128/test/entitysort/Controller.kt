@@ -1,5 +1,6 @@
 package com.net128.test.entitysort
 
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -34,6 +35,11 @@ class Controller(
 	@GetMapping("/graphviz/dot")
 	fun graphVizDot(): String {
 		return graphVizService.generateGraphvizERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+	@GetMapping("/graphviz/svg", produces = ["image/svg+xml"])
+	fun renderDotToSvg(): String {
+		return graphVizService.generateGraphvizERDiagramSvg(schemaScanner.getSortedTableNames())
 	}
 
 	@GetMapping("/dbml/code")
