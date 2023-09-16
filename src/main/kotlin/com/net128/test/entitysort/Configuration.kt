@@ -11,7 +11,7 @@ import java.sql.SQLException
 @Configuration
 class Configuration {
     @Bean(initMethod = "start", destroyMethod = "stop")
-    fun inMemoryH2Server(@Value("\${h2-server--port:9090}") port: Int): Server {
+    fun inMemoryH2Server(@Value("\${h2.server.port:9090}") port: Int): Server {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", port.toString())
     }
 }
