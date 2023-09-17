@@ -13,19 +13,19 @@ mermaid.initialize({
     startOnLoad: true,
     themeCSS: customStyles,
     themeVariables: {
-        fontFamily: "helvetica-light, arial-light, sans-serif"
+        fontFamily: 'helvetica-light, arial-light, sans-serif'
     },
     theme: 'default'
 })
 
-async function renderMermaidDiagram() {
-  const response = await fetch('/mermaid/erd?markdown=false');
+async function renderMermaidDiagram(url, target) {
+  const response = await fetch(url);
   const mermaidDiagramText = await response.text();
-  const { svg } =  await mermaid.render("erDiagramDisplaySVG", mermaidDiagramText);
-  erDiagramDisplay.innerHTML = svg
+  const { svg } =  await mermaid.render(target.id+"SVG", mermaidDiagramText);
+  target.innerHTML = svg
 }
 
-await renderMermaidDiagram()
+await renderMermaidDiagram('/mermaid/erd?markdown=false', erDiagramDisplay)
 
 
 let isDragging = false
@@ -40,7 +40,7 @@ let scale = 1
 const scaleIncrement = 0.1
 
 document.addEventListener('wheel', function(event) {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
         event.preventDefault()
 
         if (event.deltaY < 0) scale += scaleIncrement
@@ -54,13 +54,11 @@ document.addEventListener('wheel', function(event) {
         erDiagramDisplay.style.transformOrigin = 'left top'
     }
 }, { passive:false })
-
 erDiagramDisplay.addEventListener('mousedown', function(e) {
     isDragging = true
     previousX = e.clientX
     previousY = e.clientY
 })
-
 window.addEventListener('mousemove', function(e) {
     if (!isDragging) return
 
@@ -74,31 +72,7 @@ window.addEventListener('mousemove', function(e) {
 
     e.preventDefault()
 })
-
-window.addEventListener('mouseup', function() {
-    isDragging = false
-})
-
+window.addEventListener('mouseup', function() { isDragging = false })
 window.addEventListener('mouseout', function(e) {
     if (e.relatedTarget === null) isDragging = false
 })
-
-function preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault) {
-        e.preventDefault()
-    } else {
-        e.returnValue = false
-    }
-}
-function wheel(e) {
-    console.log("wheel")
-    if (e.ctrlKey) preventDefault(e)
-}
-function disable_scroll() {
-    if (window.addEventListener) {
-        window.addEventListener('DOMMouseScroll', wheel, { passive:false });
-    }
-    window.onmousewheel = document.onmousewheel = wheel;
-}
-
