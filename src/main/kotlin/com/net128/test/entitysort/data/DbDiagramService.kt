@@ -1,4 +1,4 @@
-package com.net128.test.entitysort
+package com.net128.test.entitysort.data
 
 import org.springframework.stereotype.Service
 import javax.sql.DataSource

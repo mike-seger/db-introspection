@@ -1,17 +1,17 @@
-package com.net128.test.entitysort
+package com.net128.test.entitysort.diagram
 
+import com.net128.test.entitysort.data.DbmlTable
 import com.net128.test.entitysort.util.TestUtil.indent
 import guru.nidi.graphviz.engine.Format
 import guru.nidi.graphviz.engine.Graphviz
 import guru.nidi.graphviz.engine.GraphvizJdkEngine
 import guru.nidi.graphviz.parse.Parser
 import org.springframework.stereotype.Service
-import javax.sql.DataSource
 
 @Service
-class GraphVizService(private val dataSource: DataSource) {
+class GraphViz() {
 
-    fun generateGraphvizERDiagram(tables: List<DbmlTable>): String {
+    fun diagramDefinition(tables: List<DbmlTable>): String {
         val sb = StringBuilder()
 
         sb.append("digraph ERD {\n")
@@ -57,8 +57,8 @@ class GraphVizService(private val dataSource: DataSource) {
         return sb.toString()
     }
 
-    fun generateGraphvizERDiagramSvg(tables: List<DbmlTable>): String {
-        val dot = generateGraphvizERDiagram(tables)
+    fun svg(tables: List<DbmlTable>): String {
+        val dot = diagramDefinition(tables)
         Graphviz.useEngine(GraphvizJdkEngine())
 
         val graph = Parser().read(dot)

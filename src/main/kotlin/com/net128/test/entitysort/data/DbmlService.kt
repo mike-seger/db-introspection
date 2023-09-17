@@ -1,4 +1,4 @@
-package com.net128.test.entitysort
+package com.net128.test.entitysort.data
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.springframework.stereotype.Service

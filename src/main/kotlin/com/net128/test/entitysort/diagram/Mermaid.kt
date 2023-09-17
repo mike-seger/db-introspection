@@ -1,12 +1,13 @@
-package com.net128.test.entitysort
+package com.net128.test.entitysort.diagram
 
+import com.net128.test.entitysort.data.DbmlTable
 import com.net128.test.entitysort.util.TestUtil.indent
 import org.springframework.stereotype.Service
 
 @Service
-class MermaidService {
+class Mermaid {
 
-    fun generateMermaidERDiagram2(tables: List<DbmlTable>): String {
+    fun diagramDefinition(tables: List<DbmlTable>): String {
         val diagramBuilder = StringBuilder("erDiagram\n")
 
         tables.forEach { table ->

@@ -1,9 +1,8 @@
-package com.net128.test.entitysort
+package com.net128.test.entitysort.data
 
 import org.springframework.stereotype.Component
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
-import javax.persistence.metamodel.Attribute.PersistentAttributeType
 import javax.persistence.metamodel.EntityType
 
 import kotlin.reflect.KClass
