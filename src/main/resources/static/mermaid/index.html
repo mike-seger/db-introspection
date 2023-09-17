@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database ER Diagram</title>
+    <!-- Include the Mermaid JS library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>-->
+
+</head>
+
+<body>
+
+<div id="erDiagramDisplay"></div>
+
+<script>
+    window.onload = function() {
+        mermaid.initialize({ startOnLoad: true })
+        fetch('/mermaid/erd?markdown=false')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Render the diagram using Mermaid
+                mermaid.render('theGraph', data, function(svgCode) {
+                    document.getElementById('erDiagramDisplay').innerHTML = svgCode;
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem fetching the ER diagram:', error);
+            });
+    }
+</script>
+</body>
+
+</html>

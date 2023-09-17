@@ -4,38 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database ER Diagram</title>
-    <!-- Include the Mermaid JS library -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>-->
-
+    <title>DB and JPA Inspector</title>
 </head>
 
 <body>
 
-<div id="erDiagramDisplay"></div>
+<a href="h2-console">H2 Console</a>
+<br>
+<a href="graphviz/svg">GraphViz ER Diagram (SVG)</a>
+<br>
+<a href="graphviz/index.html">GraphViz ER Diagram Page</a>
+<br>
+<a href="mermaid/erd">Mermaid ER Diagram</a>
+<br>
+<a href="mermaid/index.html">Mermaid ER Diagram Page</a>
+<br>
+<a href="jpa/structure">JPA Structure</a>
+<br>
+<a href="jpa/entities">JPA Entities</a>
+<br>
+<a href="dbml/code">DBML Code</a>
 
-<script>
-    window.onload = function() {
-        mermaid.initialize({ startOnLoad: true })
-        fetch('/mermaid/erd?markdown=false')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.text();
-            })
-            .then(data => {
-                // Render the diagram using Mermaid
-                mermaid.render('theGraph', data, function(svgCode) {
-                    document.getElementById('erDiagramDisplay').innerHTML = svgCode;
-                });
-            })
-            .catch(error => {
-                console.error('There was a problem fetching the ER diagram:', error);
-            });
-    }
-</script>
 </body>
 
 </html>

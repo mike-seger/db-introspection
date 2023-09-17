@@ -10,8 +10,8 @@ data class User(
     val username: String,
     val password: String, // In a real scenario, never save plain text password. Instead, store hashed ones.
     val email: String,
-    @OneToOne(cascade = [CascadeType.ALL])
-    val profile: UserProfile
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    val profile: UserProfile
 )
 
 @Entity
@@ -21,10 +21,10 @@ data class UserProfile(
     val firstName: String,
     val lastName: String,
     val dateOfBirth: String,
-    @OneToOne(mappedBy = "profile")
-    val user: User,
-    @OneToOne(cascade = [CascadeType.ALL])
-    val address: Address
+//    @OneToOne(mappedBy = "profile")
+//    val user: User,
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    val address: Address
 )
 
 @Entity
@@ -35,8 +35,8 @@ data class Address(
     val city: String,
     val state: String,
     val zipCode: String,
-    @OneToOne(mappedBy = "address")
-    val profile: UserProfile,
+//    @OneToOne(mappedBy = "address")
+//    val profile: UserProfile,
     @ManyToOne
     val country: Country
 )

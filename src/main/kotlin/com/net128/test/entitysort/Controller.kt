@@ -20,19 +20,19 @@ class Controller(
 		return schemaScanner.getSortedTableNames()
 	}
 
-	@GetMapping("/db/schema")
+	@GetMapping("/db/schema", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun dbSchema(): String? {
 		return schemaScanner.getCurrentSchema()
 	}
 
-	@GetMapping("/mermaid/erd")
+	@GetMapping("/mermaid/erd", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun mermaidErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
 		if(markdown)
 			return "```mermaid\n${mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
 		return mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
 	}
 
-	@GetMapping("/graphviz/dot")
+	@GetMapping("/graphviz/dot", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun graphVizDot(): String {
 		return graphVizService.generateGraphvizERDiagram(schemaScanner.getSortedTableNames())
 	}
@@ -42,7 +42,7 @@ class Controller(
 		return graphVizService.generateGraphvizERDiagramSvg(schemaScanner.getSortedTableNames())
 	}
 
-	@GetMapping("/dbml/code")
+	@GetMapping("/dbml/code", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun dbMlCode(): String {
 		return dbDiagramService.generateDbDiagramERDiagram(schemaScanner.getSortedTableNames())
 	}
