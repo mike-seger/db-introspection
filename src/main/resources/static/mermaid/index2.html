@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database ER Diagram</title>
+    <!-- Include the Mermaid JS library -->
+<!--    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
+
     <style>
         #erDiagramDisplay {
-            width: 100%;
+            width: 100%; /* You can adjust this based on your layout requirements */
         }
 
         #erDiagramDisplay svg {
@@ -22,9 +26,10 @@
 </head>
 
 <body>
-    <div id="erDiagramDisplay"></div>
-    <div id="erDiagramDisplay2"></div>
-    <script src="app.js" type="module"></script>
+
+<div id="erDiagramDisplay"></div>
+
+<script src="app.js"></script>
 </body>
 
 </html>

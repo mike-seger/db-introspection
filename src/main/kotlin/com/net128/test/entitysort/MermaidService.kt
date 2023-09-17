@@ -56,6 +56,31 @@ class MermaidService(private val dataSource: DataSource) {
         }
     }
 
+    fun generateMermaidERDiagram2(tables: List<DbmlTable>): String {
+        val diagramBuilder = StringBuilder("erDiagram\n")
+
+        tables.forEach { table ->
+            // Append all columns
+            diagramBuilder.append("    ${table.name} {\n")
+
+            table.columns.forEach { column ->
+                if (column.isPrimaryKey == true) {
+                    diagramBuilder.append("        ${column.name} ${column.type} PK\n")
+                } else {
+                    diagramBuilder.append("        ${column.name} ${column.type}\n")
+                }
+            }
+            diagramBuilder.append("    }\n")
+
+            // Fetch foreign keys
+            table.references.forEach { reference ->
+                diagramBuilder.append("    ${reference.fromTable} ||--o{ ${reference.toTable} : \"\"\n")
+            }
+        }
+
+        return diagramBuilder.toString()
+    }
+
     private fun processDataType(type: String): String {
         val substitutions = mapOf(
             "CHARACTER VARYING" to "VARCHAR",

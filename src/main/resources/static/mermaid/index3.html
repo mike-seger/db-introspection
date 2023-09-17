@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database ER Diagram</title>
+    <style>
+        #erDiagramDisplay {
+            width: 100%; /* You can adjust this based on your layout requirements */
+        }
+
+        #erDiagramDisplay svg {
+            width: 1920px;
+            height: auto;
+        }
+
+        #erDiagramDisplay:active {
+            cursor: move;
+        }
+    </style>
+    <link rel='stylesheet' href='https://cdn.rawgit.com/knsv/mermaid/7.0.0/dist/mermaid.css'>
+</head>
+
+<body>
+<!--<img src = "../test.svg" alt=""/>-->
+<br>
+    <button id="okbut">OK</button><br>
+    <div style="background-color: green; border: 10px solid red; min-width: 100px; min-height: 100px;">
+    </div>
+<div class="mermaid" style="min-width: 500px; min-height: 500px; background-color: lightblue; border: 3px solid yellow;" id="erDiagramDisplay"></div>
+    <script src="app.js" type="module"></script>
+</body>
+
+</html>

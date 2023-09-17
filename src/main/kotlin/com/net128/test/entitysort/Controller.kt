@@ -13,6 +13,7 @@ class Controller(
 	private val mermaidService: MermaidService,
 	private val dbDiagramService: DbDiagramService,
 	private val graphVizService: GraphVizService,
+	private val dbmlService: DbmlService
 ) {
 
 	@GetMapping("/db/tables")
@@ -25,11 +26,19 @@ class Controller(
 		return schemaScanner.getCurrentSchema()
 	}
 
-	@GetMapping("/mermaid/erd", produces = [MediaType.TEXT_PLAIN_VALUE])
+	@GetMapping("/mermaid/erd2", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun mermaidErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
 		if(markdown)
 			return "```mermaid\n${mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
 		return mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+
+	@GetMapping("/mermaid/erd", produces = [MediaType.TEXT_PLAIN_VALUE])
+	fun mermaidErd2(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
+		val code = mermaidService.generateMermaidERDiagram2(dbmlService.generateDbml())
+		if(markdown) return "```mermaid\n$code\n```"
+		return code
 	}
 
 	@GetMapping("/graphviz/dot", produces = [MediaType.TEXT_PLAIN_VALUE])
@@ -45,6 +54,11 @@ class Controller(
 	@GetMapping("/dbml/code", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun dbMlCode(): String {
 		return dbDiagramService.generateDbDiagramERDiagram(schemaScanner.getSortedTableNames())
+	}
+
+	@GetMapping("/dbml/model")
+	fun dbml(): List<DbmlTable> {
+		return dbmlService.generateDbml(schema = "PUBLIC")
 	}
 
 	@GetMapping("/jpa/entities")

@@ -1,4 +1,10 @@
 server.port: 8081
+
+spring:
+  web:
+    resources:
+      static-locations: "file:src/main/resources/static/"
+
 spring.datasource:
 #  url: jdbc:h2:mem:testdb;INIT=CREATE SCHEMA IF NOT EXISTS S0\;SET SCHEMA S0;
   url: jdbc:h2:mem:db1
@@ -16,3 +22,4 @@ logging.level.root: info
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.action: create
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target: create.sql
 #spring.jpa.properties.javax.persistence.schema-generation.scripts.create-source: metadata
+

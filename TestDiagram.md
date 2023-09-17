@@ -1,224 +1,224 @@
 ```mermaid
 erDiagram
-    ADDRESS {
-        bigint id
-        varchar city
-        varchar state
-        varchar street
-        varchar zip_code
-        bigint country_id
+    address {
+        id bigint PK
+        city varchar(255)
+        state varchar(255)
+        street varchar(255)
+        zip_code varchar(255)
+        country_id bigint
     }
-    COUNTRY ||--o{ ADDRESS : ""
-    ADDRESS2 {
-        bigint id
-        varchar address_id
-        varchar street
-        varchar city_id
+    address ||--o{ country : ""
+    address2 {
+        id bigint PK
+        address_id varchar(255)
+        street varchar(255)
+        city_id varchar(255)
     }
-    CITY ||--o{ ADDRESS2 : ""
-    BOOK {
-        bigint id
-        varchar author
-        varchar isbn
-        varchar title
-        bigint library_id
+    address2 ||--o{ city : ""
+    book {
+        id bigint PK
+        author varchar(255)
+        isbn varchar(255)
+        title varchar(255)
+        library_id bigint
     }
-    LIBRARY ||--o{ BOOK : ""
-    CART {
-        bigint id
-        bigint user_id
+    book ||--o{ library : ""
+    cart {
+        id bigint PK
+        user_id bigint
     }
-    user ||--o{ CART : ""
-    CART_ITEM {
-        bigint id
-        int quantity
-        bigint cart_id
-        bigint product_id
+    cart ||--o{ user : ""
+    cart_item {
+        id bigint PK
+        quantity integer
+        cart_id bigint
+        product_id bigint
     }
-    CART ||--o{ CART_ITEM : ""
-    PRODUCT ||--o{ CART_ITEM : ""
-    CATEGORY {
-        bigint id
-        varchar name
+    cart_item ||--o{ cart : ""
+    cart_item ||--o{ product : ""
+    category {
+        id bigint PK
+        name varchar(255)
     }
-    CITY {
-        bigint id
-        varchar city_id
-        varchar name
+    city {
+        id bigint PK
+        city_id varchar(255)
+        name varchar(255)
     }
-    CLUB {
-        bigint id
-        varchar name
+    club {
+        id bigint PK
+        name varchar(255)
     }
-    COUNTRY {
-        bigint id
-        varchar name
+    country {
+        id bigint PK
+        name varchar(255)
     }
-    COURSE {
-        bigint id
-        int credits
-        varchar description
-        varchar name
-        bigint department_id
+    course {
+        id bigint PK
+        credits integer
+        description varchar(255)
+        name varchar(255)
+        department_id bigint
     }
-    DEPARTMENT ||--o{ COURSE : ""
-    DEPARTMENT {
-        bigint id
-        varchar name
-        bigint faculty_id
+    course ||--o{ department : ""
+    department {
+        id bigint PK
+        name varchar(255)
+        faculty_id bigint
     }
-    FACULTY ||--o{ DEPARTMENT : ""
-    DISCOUNT {
-        bigint id
-        varchar code
-        varchar end_date
-        double_precision percentage
-        varchar start_date
+    department ||--o{ faculty : ""
+    discount {
+        id bigint PK
+        code varchar(255)
+        end_date varchar(255)
+        percentage numeric(53)
+        start_date varchar(255)
     }
-    DISCOUNT_PRODUCT {
-        bigint discount_id
-        bigint product_id
+    discount_product {
+        discount_id bigint
+        product_id bigint
     }
-    DISCOUNT ||--o{ DISCOUNT_PRODUCT : ""
-    PRODUCT ||--o{ DISCOUNT_PRODUCT : ""
-    EMPLOYEE {
-        bigint id
-        varchar name
-        varchar address_id
+    discount_product ||--o{ discount : ""
+    discount_product ||--o{ product : ""
+    employee {
+        id bigint PK
+        name varchar(255)
+        address_id varchar(255)
     }
-    ADDRESS2 ||--o{ EMPLOYEE : ""
-    FACULTY {
-        bigint id
-        varchar name
-        bigint university_id
+    employee ||--o{ address2 : ""
+    faculty {
+        id bigint PK
+        name varchar(255)
+        university_id bigint
     }
-    UNIVERSITY ||--o{ FACULTY : ""
-    INVENTORY {
-        bigint id
-        int stock_count
-        bigint product_id
+    faculty ||--o{ university : ""
+    inventory {
+        id bigint PK
+        stock_count integer
+        product_id bigint
     }
-    PRODUCT ||--o{ INVENTORY : ""
-    LIBRARY {
-        bigint id
-        varchar name
+    inventory ||--o{ product : ""
+    library {
+        id bigint PK
+        name varchar(255)
     }
-    ORDER_ITEM {
-        bigint id
-        int quantity
-        bigint order_id
-        bigint product_id
+    order_item {
+        id bigint PK
+        quantity integer
+        order_id bigint
+        product_id bigint
     }
-    PRODUCT ||--o{ ORDER_ITEM : ""
-    order ||--o{ ORDER_ITEM : ""
-    PAYMENT {
-        bigint id
-        double_precision amount
-        varchar date
-        varchar payment_type
-        bigint order_id
+    order_item ||--o{ product : ""
+    order_item ||--o{ order : ""
+    payment {
+        id bigint PK
+        amount numeric(53)
+        date varchar(255)
+        payment_type varchar(255)
+        order_id bigint
     }
-    order ||--o{ PAYMENT : ""
-    PRODUCT {
-        bigint id
-        varchar description
-        varchar name
-        double_precision price
-        bigint category_id
-        bigint supplier_id
+    payment ||--o{ order : ""
+    product {
+        id bigint PK
+        description varchar(255)
+        name varchar(255)
+        price numeric(53)
+        category_id bigint
+        supplier_id bigint
     }
-    CATEGORY ||--o{ PRODUCT : ""
-    SUPPLIER ||--o{ PRODUCT : ""
-    PROFESSOR {
-        bigint id
-        varchar first_name
-        varchar last_name
-        varchar specialization
+    product ||--o{ category : ""
+    product ||--o{ supplier : ""
+    professor {
+        id bigint PK
+        first_name varchar(255)
+        last_name varchar(255)
+        specialization varchar(255)
     }
-    REVIEW {
-        bigint id
-        varchar comment
-        int rating
-        bigint product_id
-        bigint user_id
+    review {
+        id bigint PK
+        comment varchar(255)
+        rating integer
+        product_id bigint
+        user_id bigint
     }
-    PRODUCT ||--o{ REVIEW : ""
-    user ||--o{ REVIEW : ""
-    SHIPMENT {
-        bigint id
-        varchar status
-        varchar tracking_number
-        bigint order_id
+    review ||--o{ product : ""
+    review ||--o{ user : ""
+    shipment {
+        id bigint PK
+        status varchar(255)
+        tracking_number varchar(255)
+        order_id bigint
     }
-    order ||--o{ SHIPMENT : ""
-    STAFF {
-        bigint id
-        varchar first_name
-        varchar last_name
-        varchar position
-        double_precision salary
+    shipment ||--o{ order : ""
+    staff {
+        id bigint PK
+        first_name varchar(255)
+        last_name varchar(255)
+        position varchar(255)
+        salary numeric(53)
     }
-    STUDENT {
-        bigint id
-        varchar date_of_birth
-        varchar email
-        varchar enrollment_date
-        varchar first_name
-        double_precision grade_average
-        varchar last_name
-        bigint advisor_id
+    student {
+        id bigint PK
+        date_of_birth varchar(255)
+        email varchar(255)
+        enrollment_date varchar(255)
+        first_name varchar(255)
+        grade_average numeric(53)
+        last_name varchar(255)
+        advisor_id bigint
     }
-    PROFESSOR ||--o{ STUDENT : ""
-    STUDENT_CLUB {
-        bigint club_id
-        bigint student_id
+    student ||--o{ professor : ""
+    student_club {
+        club_id bigint
+        student_id bigint
     }
-    CLUB ||--o{ STUDENT_CLUB : ""
-    STUDENT ||--o{ STUDENT_CLUB : ""
-    STUDENT_COURSE {
-        bigint student_id
-        bigint course_id
+    student_club ||--o{ club : ""
+    student_club ||--o{ student : ""
+    student_course {
+        student_id bigint
+        course_id bigint
     }
-    COURSE ||--o{ STUDENT_COURSE : ""
-    STUDENT ||--o{ STUDENT_COURSE : ""
-    SUPPLIER {
-        bigint id
-        varchar name
+    student_course ||--o{ course : ""
+    student_course ||--o{ student : ""
+    supplier {
+        id bigint PK
+        name varchar(255)
     }
-    UNIVERSITY {
-        bigint id
-        varchar name
+    university {
+        id bigint PK
+        name varchar(255)
     }
-    USER_PROFILE {
-        bigint id
-        varchar date_of_birth
-        varchar first_name
-        varchar last_name
+    user_profile {
+        id bigint PK
+        date_of_birth varchar(255)
+        first_name varchar(255)
+        last_name varchar(255)
     }
-    WISHLIST {
-        bigint id
-        bigint user_id
+    wishlist {
+        id bigint PK
+        user_id bigint
     }
-    user ||--o{ WISHLIST : ""
-    WISHLIST_PRODUCT {
-        bigint wishlist_id
-        bigint product_id
+    wishlist ||--o{ user : ""
+    wishlist_product {
+        wishlist_id bigint
+        product_id bigint
     }
-    PRODUCT ||--o{ WISHLIST_PRODUCT : ""
-    WISHLIST ||--o{ WISHLIST_PRODUCT : ""
+    wishlist_product ||--o{ product : ""
+    wishlist_product ||--o{ wishlist : ""
     order {
-        bigint id
-        varchar date
-        varchar status
-        double_precision total_amount
-        bigint user_id
+        id bigint PK
+        date varchar(255)
+        status varchar(255)
+        total_amount numeric(53)
+        user_id bigint
     }
-    user ||--o{ order : ""
+    order ||--o{ user : ""
     user {
-        bigint id
-        varchar email
-        varchar password
-        varchar username
+        id bigint PK
+        email varchar(255)
+        password varchar(255)
+        username varchar(255)
     }
 
 ```
