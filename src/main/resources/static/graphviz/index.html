@@ -15,11 +15,9 @@
 </head>
 <body>
 
-<h2>Graphviz ERD Output</h2>
-<div id="graph"></div>
+<div id="erDiagramDisplay"></div>
 
 <script>
-    // Check if Viz is available
     if (typeof Viz !== "undefined") {
         fetch('/graphviz/dot')
             .then(response => response.text())
@@ -27,7 +25,7 @@
                 const viz = new Viz();
                 viz.renderSVGElement(data)
                     .then(element => {
-                        document.getElementById('graph').appendChild(element);
+                        document.getElementById('erDiagramDisplay').appendChild(element);
                     })
                     .catch(error => {
                         console.error("Error rendering the graph:", error);
@@ -40,6 +38,7 @@
         console.error("Viz.js is not loaded correctly.");
     }
 </script>
+<script src="../common/page-move-zoom.js"></script>
 
 </body>
 </html>

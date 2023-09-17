@@ -35,12 +35,12 @@ class Controller(
 
 	@GetMapping("/graphviz/dot", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun graphVizDot(): String {
-		return graphVizService.generateGraphvizERDiagram(schemaScanner.getSortedTableNames())
+		return graphVizService.generateGraphvizERDiagram(dbmlService.generateDbml())
 	}
 
 	@GetMapping("/graphviz/svg", produces = ["image/svg+xml"])
 	fun renderDotToSvg(): String {
-		return graphVizService.generateGraphvizERDiagramSvg(schemaScanner.getSortedTableNames())
+		return graphVizService.generateGraphvizERDiagramSvg(dbmlService.generateDbml())
 	}
 
 	@GetMapping("/dbml/code", produces = [MediaType.TEXT_PLAIN_VALUE])

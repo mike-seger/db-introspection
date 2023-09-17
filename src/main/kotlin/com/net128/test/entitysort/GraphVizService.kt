@@ -1,85 +1,67 @@
 package com.net128.test.entitysort
 
+import com.net128.test.entitysort.util.TestUtil.indent
+import guru.nidi.graphviz.engine.Format
+import guru.nidi.graphviz.engine.Graphviz
+import guru.nidi.graphviz.engine.GraphvizJdkEngine
+import guru.nidi.graphviz.parse.Parser
 import org.springframework.stereotype.Service
 import javax.sql.DataSource
-import java.sql.Connection
-import java.sql.DatabaseMetaData
-
-import guru.nidi.graphviz.engine.*
-import guru.nidi.graphviz.parse.Parser
-import java.lang.Exception
 
 @Service
 class GraphVizService(private val dataSource: DataSource) {
 
-    fun generateGraphvizERDiagram(qualifiedTableNames: List<String>): String {
+    fun generateGraphvizERDiagram(tables: List<DbmlTable>): String {
         val sb = StringBuilder()
-        dataSource.connection.use {
-            val metaData: DatabaseMetaData = it.metaData
 
-            sb.append("digraph ERD {\n")
-            sb.append("\tgraph[rankdir=LR, splines=true];\n")
-            sb.append("\tnode [shape=record, fontsize=10, fontname=\"Verdana\"];\n")
-            sb.append("\tedge [style=solid, color=\"gray\"];\n")
+        sb.append("digraph ERD {\n")
+        sb.append("\tgraph[rankdir=LR, splines=true];\n")
+        sb.append("\tnode [shape=record, fontsize=10, fontname=\"Verdana\"];\n")
+        sb.append("\tedge [style=solid, color=\"gray\"];\n")
 
-            qualifiedTableNames.forEach { qualifiedTableName ->
-                val parts = qualifiedTableName.split('.')
-                val schemaName = parts[0]
-                val tableName = parts[1]
+        tables.forEach { table ->
+            val tableName = table.name
 
-                sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
-                sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
-//            sb.append("\t\t\t<tr><td bgcolor=\"lightblue\">$tableName</td></tr>\n")
-                sb.append("\t\t\t<tr><td bgcolor=\"dodgerblue4\" color=\"white\"><font color=\"white\">$tableName</font></td></tr>\n")
+            sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
+            sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
+            sb.append("\t\t\t<tr><td bgcolor=\"dodgerblue4\" color=\"white\"><font color=\"white\">$tableName</font></td></tr>\n")
 
-                //sb.append("    \"$tableName\" [label=<<TABLE><TR><TD>$tableName</TD></TR>\n")
+            table.columns.forEach { column ->
+                val columnName = column.name
+                val dataType = column.type
+                    .replace(" ", "_")
+                    .replace("CHARACTER_VARYING", "VARCHAR")
 
-                val columnsRs = metaData.getColumns(null, schemaName, tableName, null)
-                while (columnsRs.next()) {
-                    val columnName = columnsRs.getString("COLUMN_NAME")
-                    val dataType = columnsRs.getString("TYPE_NAME")
-                        .replace(" ", "_")
-                        .replace("CHARACTER_VARYING", "VARCHAR")
-                        .replace(" ", "_")
-
-                    sb.append("<tr><td>$columnName : $dataType\u2001\u2003</td></tr>\n")
-                }
-
-                sb.append("</table>>];\n")
+                sb.append("<tr><td>$columnName : $dataType\u2001\u2003\u2001\u2001\u2001</td></tr>\n")
             }
 
-            val alreadyProcessedRelations = mutableSetOf<String>()
-
-            qualifiedTableNames.forEach { qualifiedTableName ->
-                val parts = qualifiedTableName.split('.')
-                val schemaName = parts[0]
-                val tableName = parts[1]
-
-                val foreignKeysRs = metaData.getImportedKeys(null, schemaName, tableName)
-                while (foreignKeysRs.next()) {
-                    val pkTableName = foreignKeysRs.getString("PKTABLE_NAME")
-                    val fkTableName = foreignKeysRs.getString("FKTABLE_NAME")
-                    val relation = "$pkTableName -> $fkTableName"
-
-                    if (!alreadyProcessedRelations.contains(relation)) {
-                        sb.append("    \"$pkTableName\" -> \"$fkTableName\";\n")
-                        alreadyProcessedRelations.add(relation)
-                    }
-                }
-            }
-
-            sb.append("}")
+            sb.append("</table>>];\n")
         }
+
+        val alreadyProcessedRelations = mutableSetOf<String>()
+
+        tables.forEach { table ->
+            table.references.forEach { reference ->
+                val pkTableName = reference.toTable
+                val fkTableName = table.name // the current table being processed
+                val relation = "$pkTableName -> $fkTableName"
+
+                if (!alreadyProcessedRelations.contains(relation)) {
+                    sb.append(indent(1, "\"$pkTableName\" -> \"$fkTableName\";\n"))
+                    alreadyProcessedRelations.add(relation)
+                }
+            }
+        }
+
+        sb.append("}")
         return sb.toString()
     }
 
-    fun generateGraphvizERDiagramSvg(qualifiedTableNames: List<String>): String {
-            val dot = generateGraphvizERDiagram(qualifiedTableNames)
-            // Use the pure Java renderer
-            Graphviz.useEngine(GraphvizJdkEngine())
+    fun generateGraphvizERDiagramSvg(tables: List<DbmlTable>): String {
+        val dot = generateGraphvizERDiagram(tables)
+        Graphviz.useEngine(GraphvizJdkEngine())
 
-            val graph = Parser().read(dot)
-            return Graphviz.fromGraph(graph).render(Format.SVG).toString()
-
+        val graph = Parser().read(dot)
+        return Graphviz.fromGraph(graph).render(Format.SVG).toString()
     }
 }
