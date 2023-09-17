@@ -26,14 +26,6 @@ class Controller(
 		return schemaScanner.getCurrentSchema()
 	}
 
-	@GetMapping("/mermaid/erd2", produces = [MediaType.TEXT_PLAIN_VALUE])
-	fun mermaidErd(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
-		if(markdown)
-			return "```mermaid\n${mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())}\n```"
-		return mermaidService.generateMermaidERDiagram(schemaScanner.getSortedTableNames())
-	}
-
-
 	@GetMapping("/mermaid/erd", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun mermaidErd2(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
 		val code = mermaidService.generateMermaidERDiagram2(dbmlService.generateDbml())

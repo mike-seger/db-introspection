@@ -11,7 +11,10 @@ const customStyles = `
 
 mermaid.initialize({
     startOnLoad: true,
-    'themeCSS': customStyles,
+    themeCSS: customStyles,
+    themeVariables: {
+        fontFamily: "helvetica-light, arial-light, sans-serif"
+    },
     theme: 'default'
 })
 
@@ -50,7 +53,7 @@ document.addEventListener('wheel', function(event) {
         erDiagramDisplay.style.transform = `scale(${scale})`
         erDiagramDisplay.style.transformOrigin = 'left top'
     }
-})
+}, { passive:false })
 
 erDiagramDisplay.addEventListener('mousedown', function(e) {
     isDragging = true
@@ -79,3 +82,23 @@ window.addEventListener('mouseup', function() {
 window.addEventListener('mouseout', function(e) {
     if (e.relatedTarget === null) isDragging = false
 })
+
+function preventDefault(e) {
+    e = e || window.event;
+    if (e.preventDefault) {
+        e.preventDefault()
+    } else {
+        e.returnValue = false
+    }
+}
+function wheel(e) {
+    console.log("wheel")
+    if (e.ctrlKey) preventDefault(e)
+}
+function disable_scroll() {
+    if (window.addEventListener) {
+        window.addEventListener('DOMMouseScroll', wheel, { passive:false });
+    }
+    window.onmousewheel = document.onmousewheel = wheel;
+}
+
