@@ -1,17 +1,17 @@
 package com.net128.test.entitysort.model
 
 import javax.persistence.*
+import java.math.BigDecimal
 
 @Entity
-@Table(name = "`USER`")
-data class User(
+data class Customer(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val username: String,
-    val password: String, // In a real scenario, never save plain text password. Instead, store hashed ones.
+    val password: String,
     val email: String,
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    val profile: UserProfile
+    @OneToOne(cascade = [CascadeType.ALL])
+    val profile: UserProfile
 )
 
 @Entity
@@ -20,11 +20,19 @@ data class UserProfile(
     val id: Long,
     val firstName: String,
     val lastName: String,
-    val dateOfBirth: String,
-//    @OneToOne(mappedBy = "profile")
-//    val user: User,
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    val address: Address
+    @OneToOne(mappedBy = "profile", cascade = [CascadeType.ALL])
+    val address: Address,
+    @OneToOne(mappedBy = "profile", cascade = [CascadeType.ALL])
+    val paymentDetail: PaymentDetail
+)
+
+@Entity
+data class PaymentDetail(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val creditCardNumber: String,
+    @OneToOne
+    val profile: UserProfile
 )
 
 @Entity
@@ -33,19 +41,28 @@ data class Address(
     val id: Long,
     val street: String,
     val city: String,
-    val state: String,
-    val zipCode: String,
-//    @OneToOne(mappedBy = "address")
-//    val profile: UserProfile,
     @ManyToOne
-    val country: Country
+    val state: State,
+    @ManyToOne
+    val country: Country,
+    @OneToOne
+    val profile: UserProfile? = null
+)
+
+@Entity
+data class State(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val name: String,
+    @OneToMany(mappedBy = "state")
+    val cities: List<Address> = mutableListOf()
 )
 
 @Entity
 data class Country(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    val name: String,
+    val name: Char, // Assuming single char representation like 'U' for USA
     @OneToMany(mappedBy = "country")
     val addresses: List<Address> = mutableListOf()
 )
@@ -56,14 +73,24 @@ data class Product(
     val id: Long,
     val name: String,
     val description: String,
-    val price: Double,
+    val price: BigDecimal,
     @ManyToOne
     val category: Category,
-    @OneToMany(mappedBy = "product")
-    val reviews: List<Review> = mutableListOf(),
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    val supplier: Supplier
+    val brand: Brand,
+    @ManyToMany
+    @JoinTable(name = "product_tag")
+    val tags: List<Tag> = mutableListOf()
+)
+
+@Entity
+data class Brand(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val name: String,
+    val description: String,
+    @OneToMany(mappedBy = "brand")
+    val products: List<Product> = mutableListOf()
 )
 
 @Entity
@@ -72,7 +99,11 @@ data class Category(
     val id: Long,
     val name: String,
     @OneToMany(mappedBy = "category")
-    val products: List<Product> = mutableListOf()
+    val products: List<Product> = mutableListOf(),
+    @ManyToOne
+    val parentCategory: Category? = null,
+    @OneToMany(mappedBy = "parentCategory")
+    val subCategories: List<Category> = mutableListOf()
 )
 
 @Entity
@@ -84,7 +115,7 @@ data class Review(
     @ManyToOne
     val product: Product,
     @ManyToOne
-    val user: User
+    val customer: Customer
 )
 
 @Entity
@@ -92,7 +123,7 @@ data class Cart(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @OneToOne
-    val user: User,
+    val customer: Customer,
     @OneToMany(mappedBy = "cart", cascade = [CascadeType.ALL])
     val items: List<CartItem> = mutableListOf()
 )
@@ -109,15 +140,14 @@ data class CartItem(
 )
 
 @Entity
-@Table(name = "`ORDER`")
-data class Order(
+data class CustomerOrder(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val date: String,
-    val totalAmount: Double,
+    val totalAmount: BigDecimal,
     @ManyToOne
-    val user: User,
-    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
+    val customer: Customer,
+    @OneToMany(mappedBy = "customerOrder", cascade = [CascadeType.ALL])
     val orderItems: List<OrderItem> = mutableListOf(),
     @Enumerated(EnumType.STRING)
     val status: OrderStatus
@@ -131,35 +161,28 @@ data class OrderItem(
     @ManyToOne
     val product: Product,
     @ManyToOne
-    val order: Order
+    val customerOrder: CustomerOrder
 )
 
 @Entity
 data class Payment(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    val amount: Double,
+    val amount: BigDecimal,
     val date: String,
     @Enumerated(EnumType.STRING)
     val paymentType: PaymentType,
     @OneToOne
-    val order: Order
+    val customerOrder: CustomerOrder
 )
-
-enum class PaymentType {
-    CREDIT_CARD, DEBIT_CARD, PAYPAL, CASH_ON_DELIVERY
-}
-
-enum class OrderStatus {
-    PENDING, SHIPPED, DELIVERED, CANCELLED
-}
 
 @Entity
 data class Supplier(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val name: String,
-    @OneToMany(mappedBy = "supplier")
+    @ManyToMany
+    @JoinTable(name = "supplier_product")
     val products: List<Product> = mutableListOf()
 )
 
@@ -167,9 +190,11 @@ data class Supplier(
 data class Inventory(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    val stockCount: Int,
     @OneToOne
     val product: Product,
-    val stockCount: Int
+    @ManyToOne
+    val warehouse: Warehouse
 )
 
 @Entity
@@ -177,15 +202,22 @@ data class Shipment(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @OneToOne
-    val order: Order,
+    @JoinColumn(name = "customer_order_id")
+    val customerOrder: CustomerOrder,
     val trackingNumber: String,
     @Enumerated(EnumType.STRING)
     val status: ShipmentStatus
 )
 
-enum class ShipmentStatus {
-    IN_TRANSIT, DELIVERED, RETURNED
-}
+@Entity
+data class Tag(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val name: String,
+    val description: String,
+    @ManyToMany(mappedBy = "tags")
+    val products: List<Product> = mutableListOf()
+)
 
 @Entity
 data class Discount(
@@ -196,11 +228,7 @@ data class Discount(
     val startDate: String,
     val endDate: String,
     @ManyToMany
-    @JoinTable(
-        name = "discount_product",
-        joinColumns = [JoinColumn(name = "discount_id")],
-        inverseJoinColumns = [JoinColumn(name = "product_id")]
-    )
+    @JoinTable(name = "discount_product")
     val applicableProducts: List<Product> = mutableListOf()
 )
 
@@ -209,12 +237,40 @@ data class Wishlist(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @OneToOne
-    val user: User,
+    val customer: Customer,
     @ManyToMany
-    @JoinTable(
-        name = "wishlist_product",
-        joinColumns = [JoinColumn(name = "wishlist_id")],
-        inverseJoinColumns = [JoinColumn(name = "product_id")]
-    )
+    @JoinTable(name = "wishlist_product")
     val products: List<Product> = mutableListOf()
 )
+
+@Entity
+data class Manufacturer(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val name: String,
+    @ManyToMany
+    @JoinTable(name = "manufacturer_product")
+    val products: List<Product> = mutableListOf()
+)
+
+@Entity
+data class Warehouse(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val name: String,
+    val location: String,
+    @OneToMany(mappedBy = "warehouse")
+    val inventories: List<Inventory> = mutableListOf()
+)
+
+enum class PaymentType {
+    CREDIT_CARD, DEBIT_CARD, PAYPAL, CASH_ON_DELIVERY
+}
+
+enum class OrderStatus {
+    PENDING, SHIPPED, DELIVERED, CANCELLED
+}
+
+enum class ShipmentStatus {
+    IN_TRANSIT, DELIVERED, RETURNED
+}

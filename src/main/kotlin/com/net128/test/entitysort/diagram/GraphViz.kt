@@ -1,6 +1,7 @@
 package com.net128.test.entitysort.diagram
 
 import com.net128.test.entitysort.data.DbmlTable
+import com.net128.test.entitysort.data.RefType
 import com.net128.test.entitysort.util.TestUtil.indent
 import guru.nidi.graphviz.engine.Format
 import guru.nidi.graphviz.engine.Graphviz
@@ -9,7 +10,7 @@ import guru.nidi.graphviz.parse.Parser
 import org.springframework.stereotype.Service
 
 @Service
-class GraphViz() {
+class GraphViz {
 
     fun diagramDefinition(tables: List<DbmlTable>): String {
         val sb = StringBuilder()
@@ -44,14 +45,24 @@ class GraphViz() {
             table.references.forEach { reference ->
                 val pkTableName = reference.toTable
                 val fkTableName = table.name // the current table being processed
-                val relation = "$pkTableName -> $fkTableName"
+
+                // Get the appropriate arrow direction/style based on the reference type
+                val arrowType = when (reference.refType) {
+                    RefType.OneToOne -> " -> "       // a simple directed edge for one-to-one
+                    RefType.OneToMany -> " -> "      // a simple directed edge for one-to-many
+                    RefType.ManyToOne -> " <- "      // you can choose a different style if needed
+                    RefType.ManyToMany -> " <-> "    // a bidirectional edge for many-to-many
+                }
+
+                val relation = "$pkTableName$arrowType$fkTableName"
 
                 if (!alreadyProcessedRelations.contains(relation)) {
-                    sb.append(indent(1, "\"$pkTableName\" -> \"$fkTableName\";\n"))
+                    sb.append(indent(1, "\"$pkTableName\"$arrowType\"$fkTableName\";\n"))
                     alreadyProcessedRelations.add(relation)
                 }
             }
         }
+
 
         sb.append("}")
         return sb.toString()

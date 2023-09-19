@@ -1,6 +1,7 @@
 package com.net128.test.entitysort.diagram
 
 import com.net128.test.entitysort.data.DbmlTable
+import com.net128.test.entitysort.data.RefType
 import com.net128.test.entitysort.util.TestUtil.indent
 import net.sourceforge.plantuml.FileFormat
 import net.sourceforge.plantuml.FileFormatOption
@@ -28,8 +29,13 @@ class PlantUml {
 
         tables.forEach { table ->
             table.references.forEach { reference ->
-                // Here's a simple relation representation: the table having the FK will have an arrow pointing to the primary table
-                diagramBuilder.append(indent(1, "\"${reference.fromTable}\" --> \"${reference.toTable}\"\n"))
+                val relationSymbol = when (reference.refType) {
+                    RefType.OneToOne -> "--"
+                    RefType.OneToMany -> "--o"
+                    RefType.ManyToOne -> "o--"
+                    RefType.ManyToMany -> "o--o"
+                }
+                diagramBuilder.append(indent(1, "\"${reference.fromTable}\" $relationSymbol \"${reference.toTable}\"\n"))
             }
         }
 
@@ -37,7 +43,6 @@ class PlantUml {
 
         return diagramBuilder.toString()
     }
-
     fun svg(tables: List<DbmlTable>): String {
         val plantUMLSource = diagramDefinition(tables)
         val reader = SourceStringReader(plantUMLSource)

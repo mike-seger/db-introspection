@@ -60,7 +60,7 @@ class Controller(
 
 	@GetMapping("/dbml/code", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun dbMlCode(): String {
-		return dbDiagramService.generateDbDiagramERDiagram(schemaScanner.getSortedTableNames())
+		return dbmlService.modelToDbml(dbmlService.generateDbml())
 	}
 
 	@GetMapping("/dbml/model")

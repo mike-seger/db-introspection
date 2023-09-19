@@ -13,7 +13,7 @@ class DbmlService(private val dataSource: DataSource) {
             val metaData: DatabaseMetaData = connection.metaData
             val tables = mutableListOf<DbmlTable>()
 
-            // Check if database treats mixed case unquoted SQL identifiers as case sensitive
+            // Check if database treats mixed case unquoted SQL identifiers as case-sensitive
             val isCaseSensitive = metaData.storesMixedCaseIdentifiers()
 
             val effectiveSchema = schema ?: connection.schema
@@ -81,7 +81,17 @@ class DbmlService(private val dataSource: DataSource) {
                     val rawFkColumnName = foreignKeysRs.getString("FKCOLUMN_NAME")
                     val fkColumnName = if (!isCaseSensitive) rawFkColumnName.lowercase() else rawFkColumnName
 
-                    references.add(DbmlReference(fkTableName, fkColumnName, pkTableName, pkColumnName))
+                    val fkUnique = isColumnUnique(metaData, effectiveSchema, fkTableName, fkColumnName)
+                    val pkUnique = primaryKeys.contains(pkColumnName)
+
+                    val refType = when {
+                        fkUnique && pkUnique -> RefType.OneToOne
+                        !fkUnique && pkUnique -> RefType.OneToMany
+                        fkUnique && !pkUnique -> RefType.ManyToOne
+                        else -> RefType.ManyToMany
+                    }
+
+                    references.add(DbmlReference(fkTableName, fkColumnName, pkTableName, pkColumnName, refType))
                 }
 
                 val finalTableName = if (!isCaseSensitive) tableName.lowercase() else tableName
@@ -92,6 +102,19 @@ class DbmlService(private val dataSource: DataSource) {
         }
     }
 
+    private fun isColumnUnique(metaData: DatabaseMetaData, schema: String, tableName: String, columnName: String): Boolean {
+        metaData.getIndexInfo(null, schema, tableName, true, false).use { rs ->
+            while (rs.next()) {
+                val indexColumnName = rs.getString("COLUMN_NAME")
+                val nonUnique = rs.getBoolean("NON_UNIQUE")
+
+                if (indexColumnName == columnName && !nonUnique) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
     fun modelToDbml(tables: List<DbmlTable>): String {
         val sb = StringBuilder()
@@ -99,14 +122,18 @@ class DbmlService(private val dataSource: DataSource) {
         tables.forEach { table ->
             sb.append("Table ${table.name} {\n")
             table.columns.forEach { column ->
-                sb.append("  ${column.name} ${column.type}\n")
-            }
-
-            table.references.forEach { reference ->
-                sb.append("  [${reference.fromColumn}] >- ${reference.toTable}.${reference.toColumn}\n")
+                sb.append("  ${column.name} ${column.type}")
+                if(column.isPrimaryKey == true) sb.append(" [pk]")
+                sb.append("\n")
             }
 
             sb.append("}\n\n")
+
+            table.references.forEach { reference ->
+                sb.append("Ref: ${table.name}.${reference.fromColumn} ${reference.refType} ${reference.toTable}.${reference.toColumn}\n")
+            }
+
+            if(table.references.isNotEmpty()) sb.append("\n")
         }
 
         return sb.toString()
@@ -132,15 +159,28 @@ class DbmlService(private val dataSource: DataSource) {
                         val parts = line.split(" ")
                         val columnName = parts[0].removeSurrounding("`", "`")
                         val columnType = parts[1]
-                        columns.add(DbmlColumn(columnName, columnType))
+                        val isPrimaryKEy = "[pk]" == parts[2] || "[primary key]" == parts[2]
+                        columns.add(DbmlColumn(columnName, columnType, isPrimaryKEy))
                     }
                     line.startsWith("ref:") -> {
-                        val parts = line.split(Regex("""[\[\]>. ]+"""))
+                        // Split based on relationship types, assuming they don't appear in column names
+                        val parts = line.split(Regex("""[\[\]<>\- ]+"""))
+
                         val fromColumn = parts[1]
+                        val refType = when {
+                            line.contains("<>") -> RefType.ManyToMany
+                            line.contains("-") -> RefType.OneToOne
+                            line.contains(">") -> RefType.ManyToOne
+                            line.contains("<") -> RefType.OneToMany
+                            else -> throw IllegalArgumentException("Unknown reference type in line: $line")
+                        }
+
                         val toTable = parts[2]
                         val toColumn = parts[3]
-                        references.add(DbmlReference(tableName, fromColumn, toTable, toColumn))
+
+                        references.add(DbmlReference(tableName, fromColumn, toTable, toColumn, refType))
                     }
+
                 }
             }
 
@@ -149,25 +189,23 @@ class DbmlService(private val dataSource: DataSource) {
 
         return tables
     }
+}
 
-    private fun getAllTableNames(metaData: DatabaseMetaData): List<String> {
-        val tableNames = mutableListOf<String>()
-        val rs = metaData.getTables(null, null, "%", arrayOf("TABLE"))
-        while (rs.next()) {
-            val schema = rs.getString("TABLE_SCHEM")
-            val name = rs.getString("TABLE_NAME")
-            tableNames.add("$schema.$name")
-        }
-        return tableNames
-    }
+enum class RefType(private val symbol: String) {
+    OneToOne("-"),
+    OneToMany("<"),
+    ManyToOne(">"),
+    ManyToMany("<>");
 
+    override fun toString(): String { return symbol }
 }
 
 data class DbmlReference(
     val fromTable: String,
     val fromColumn: String,
     val toTable: String,
-    val toColumn: String
+    val toColumn: String,
+    val refType: RefType
 )
 
 data class DbmlTable(

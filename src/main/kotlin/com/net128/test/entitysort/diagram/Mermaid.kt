@@ -1,6 +1,7 @@
 package com.net128.test.entitysort.diagram
 
 import com.net128.test.entitysort.data.DbmlTable
+import com.net128.test.entitysort.data.RefType
 import com.net128.test.entitysort.util.TestUtil.indent
 import org.springframework.stereotype.Service
 
@@ -23,7 +24,13 @@ class Mermaid {
             diagramBuilder.append(indent(1, "}\n"))
 
             table.references.forEach { reference ->
-                diagramBuilder.append(indent(1, "${reference.fromTable} ||--o{ ${reference.toTable} : \"\"\n"))
+                val relationSymbol = when (reference.refType) {
+                    RefType.OneToOne -> "||--||"
+                    RefType.OneToMany -> "||--o{"
+                    RefType.ManyToOne -> "o{--||"
+                    RefType.ManyToMany -> "o{--o{"
+                }
+                diagramBuilder.append(indent(1, "${reference.fromTable} $relationSymbol ${reference.toTable} : \"\"\n"))
             }
         }
 
