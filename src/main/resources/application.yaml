@@ -1,29 +1,11 @@
 server.port: 8081
-
-spring:
-  web:
-    resources:
-      static-locations: "file:src/main/resources/static/"
-
+spring.web.resources.static-locations: file:src/main/resources/static
 spring.datasource:
-#  url: jdbc:h2:mem:testdb;INIT=CREATE SCHEMA IF NOT EXISTS S0\;SET SCHEMA S0;
   url: jdbc:h2:mem:db1
-  #;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090;INIT=CREATE SCHEMA IF NOT EXISTS S0\;SET SCHEMA S0
-  #;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090;SCHEMA=PUBLIC
   driverClassName: org.h2.Driver
   username: sa
   password:
 spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 spring.jpa.hibernate.ddl-auto: create-drop
-
 spring.h2.console.enabled: true
-
-#spring.jpa.properties.hibernate.globally_quoted_identifiers: true
-#spring.jpa.hibernate.naming.physical-strategy: com.net128.test.entitysort.CustomPhysicalNamingStrategy
-
-
 logging.level.root: info
-#spring.jpa.properties.javax.persistence.schema-generation.scripts.action: create
-#spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target: create.sql
-#spring.jpa.properties.javax.persistence.schema-generation.scripts.create-source: metadata
-

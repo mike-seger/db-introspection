@@ -1,8 +1,8 @@
 package com.net128.test.entitysort.diagram
 
-import com.net128.test.entitysort.data.DbmlTable
-import com.net128.test.entitysort.data.RefType
-import com.net128.test.entitysort.util.TestUtil.indent
+import com.net128.test.entitysort.data.dbml.DbmlTable
+import com.net128.test.entitysort.data.dbml.RefType
+import com.net128.test.entitysort.util.TextUtil.indent
 import net.sourceforge.plantuml.FileFormat
 import net.sourceforge.plantuml.FileFormatOption
 import net.sourceforge.plantuml.SourceStringReader

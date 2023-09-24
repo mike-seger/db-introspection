@@ -58,9 +58,9 @@ erDiagram
     discount {
         id bigint PK
         code varchar(255)
-        end_date varchar(255)
+        end_date date
         percentage numeric(53)
-        start_date varchar(255)
+        start_date date
     }
     discount_product {
         discount_id bigint
@@ -78,7 +78,7 @@ erDiagram
     inventory ||--o{ warehouse : ""
     manufacturer {
         id bigint PK
-        name varchar(255)
+        name varchar(32)
     }
     manufacturer_product {
         manufacturer_id bigint
@@ -136,7 +136,7 @@ erDiagram
     shipment {
         id bigint PK
         status varchar(255)
-        tracking_number varchar(255)
+        tracking_number varchar(16)
         customer_order_id bigint
     }
     shipment ||--o{ customer_order : ""
@@ -146,7 +146,7 @@ erDiagram
     }
     supplier {
         id bigint PK
-        name varchar(255)
+        name varchar(64)
     }
     supplier_product {
         supplier_id bigint
@@ -156,7 +156,7 @@ erDiagram
     supplier_product o{--o{ supplier : ""
     tag {
         id bigint PK
-        description varchar(255)
+        description varchar(128)
         name varchar(255)
     }
     user_profile {
@@ -166,8 +166,8 @@ erDiagram
     }
     warehouse {
         id bigint PK
-        location varchar(255)
-        name varchar(255)
+        location varchar(64)
+        name varchar(32)
     }
     wishlist {
         id bigint PK

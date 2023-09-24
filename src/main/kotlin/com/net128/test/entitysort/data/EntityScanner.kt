@@ -4,10 +4,9 @@ import org.springframework.stereotype.Component
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Id
 import javax.persistence.metamodel.EntityType
-
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
-import kotlin.reflect.full.*
+import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaField
 
 @Component

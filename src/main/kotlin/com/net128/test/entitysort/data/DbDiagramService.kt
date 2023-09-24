@@ -1,9 +1,9 @@
 package com.net128.test.entitysort.data
 
 import org.springframework.stereotype.Service
-import javax.sql.DataSource
 import java.sql.Connection
 import java.sql.DatabaseMetaData
+import javax.sql.DataSource
 
 
 @Service

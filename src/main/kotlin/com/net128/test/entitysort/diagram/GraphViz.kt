@@ -1,8 +1,7 @@
 package com.net128.test.entitysort.diagram
 
-import com.net128.test.entitysort.data.DbmlTable
-import com.net128.test.entitysort.data.RefType
-import com.net128.test.entitysort.util.TestUtil.indent
+import com.net128.test.entitysort.data.dbml.DbmlTable
+import com.net128.test.entitysort.util.TextUtil.indent
 import guru.nidi.graphviz.engine.Format
 import guru.nidi.graphviz.engine.Graphviz
 import guru.nidi.graphviz.engine.GraphvizJdkEngine
@@ -25,7 +24,7 @@ class GraphViz {
 
             sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
             sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
-            sb.append("\t\t\t<tr><td bgcolor=\"dodgerblue4\" color=\"white\"><font color=\"white\">$tableName</font></td></tr>\n")
+            sb.append("\t\t\t<tr><td bgcolor=\"dodgerblue4\" color=\"black\"><font color=\"white\">$tableName</font></td></tr>\n")
 
             table.columns.forEach { column ->
                 val columnName = column.name
@@ -47,12 +46,14 @@ class GraphViz {
                 val fkTableName = table.name // the current table being processed
 
                 // Get the appropriate arrow direction/style based on the reference type
-                val arrowType = when (reference.refType) {
-                    RefType.OneToOne -> " -> "       // a simple directed edge for one-to-one
-                    RefType.OneToMany -> " -> "      // a simple directed edge for one-to-many
-                    RefType.ManyToOne -> " <- "      // you can choose a different style if needed
-                    RefType.ManyToMany -> " <-> "    // a bidirectional edge for many-to-many
-                }
+//                val arrowType = when (reference.refType) {
+//                    RefType.OneToOne -> " -> "       // a simple directed edge for one-to-one
+//                    RefType.OneToMany -> " -> "      // a simple directed edge for one-to-many
+//                    RefType.ManyToOne -> " <- "      // you can choose a different style if needed
+//                    RefType.ManyToMany -> " <-> "    // a bidirectional edge for many-to-many
+//                }
+
+                val arrowType = " -> "
 
                 val relation = "$pkTableName$arrowType$fkTableName"
 

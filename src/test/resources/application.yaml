@@ -1,2 +1,2 @@
-server.port: 28081
-h2.server.port: -1
+server.port: 0
+h2.server.port: '-'

@@ -1,0 +1,11 @@
+Table orders {
+  order_id int [pk]
+  product_id int
+  quantity int
+}
+Ref: orders.product_id > products.product_id
+
+Table products {
+  product_id int [pk]
+  product_name varchar(50)
+}

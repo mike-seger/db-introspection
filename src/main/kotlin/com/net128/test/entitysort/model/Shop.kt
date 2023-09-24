@@ -1,7 +1,8 @@
 package com.net128.test.entitysort.model
 
-import javax.persistence.*
 import java.math.BigDecimal
+import java.time.LocalDate
+import javax.persistence.*
 
 @Entity
 data class Customer(
@@ -180,6 +181,7 @@ data class Payment(
 data class Supplier(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    @Column(length = 64)
     val name: String,
     @ManyToMany
     @JoinTable(name = "supplier_product")
@@ -204,6 +206,7 @@ data class Shipment(
     @OneToOne
     @JoinColumn(name = "customer_order_id")
     val customerOrder: CustomerOrder,
+    @Column(length = 16)
     val trackingNumber: String,
     @Enumerated(EnumType.STRING)
     val status: ShipmentStatus
@@ -214,6 +217,7 @@ data class Tag(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val name: String,
+    @Column(length = 128)
     val description: String,
     @ManyToMany(mappedBy = "tags")
     val products: List<Product> = mutableListOf()
@@ -225,8 +229,8 @@ data class Discount(
     val id: Long,
     val code: String,
     val percentage: Double,
-    val startDate: String,
-    val endDate: String,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
     @ManyToMany
     @JoinTable(name = "discount_product")
     val applicableProducts: List<Product> = mutableListOf()
@@ -247,6 +251,7 @@ data class Wishlist(
 data class Manufacturer(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    @Column(length = 32)
     val name: String,
     @ManyToMany
     @JoinTable(name = "manufacturer_product")
@@ -257,7 +262,9 @@ data class Manufacturer(
 data class Warehouse(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    @Column(length = 32)
     val name: String,
+    @Column(length = 64)
     val location: String,
     @OneToMany(mappedBy = "warehouse")
     val inventories: List<Inventory> = mutableListOf()

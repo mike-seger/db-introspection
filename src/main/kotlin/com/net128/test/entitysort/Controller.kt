@@ -1,6 +1,10 @@
 package com.net128.test.entitysort
 
 import com.net128.test.entitysort.data.*
+import com.net128.test.entitysort.data.dbml.Dbml
+import com.net128.test.entitysort.data.dbml.DbmlService
+import com.net128.test.entitysort.data.dbml.DbmlTable
+import com.net128.test.entitysort.diagram.GraphMl
 import com.net128.test.entitysort.diagram.GraphViz
 import com.net128.test.entitysort.diagram.Mermaid
 import com.net128.test.entitysort.diagram.PlantUml
@@ -18,6 +22,7 @@ class Controller(
 	private val dbDiagramService: DbDiagramService,
 	private val graphViz: GraphViz,
 	private val plantUml: PlantUml,
+	private val graphMl: GraphMl,
 	private val dbmlService: DbmlService
 ) {
 
@@ -33,39 +38,44 @@ class Controller(
 
 	@GetMapping("/mermaid/erd", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun mermaidErd2(@RequestParam(defaultValue = "true") markdown: Boolean = true): String {
-		val code = mermaid.diagramDefinition(dbmlService.generateDbml())
+		val code = mermaid.diagramDefinition(dbmlService.extractDbml())
 		if(markdown) return "```mermaid\n$code\n```"
 		return code
 	}
 
 	@GetMapping("/graphviz/dot", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun graphVizDot(): String {
-		return graphViz.diagramDefinition(dbmlService.generateDbml())
+		return graphViz.diagramDefinition(dbmlService.extractDbml())
 	}
 
 	@GetMapping("/graphviz/svg", produces = ["image/svg+xml"])
 	fun renderDotToSvg(): String {
-		return graphViz.svg(dbmlService.generateDbml())
+		return graphViz.svg(dbmlService.extractDbml())
+	}
+
+	@GetMapping("/graphml/xml", produces = [MediaType.TEXT_PLAIN_VALUE])
+	fun graphMl(): String {
+		return graphMl.diagramDefinition(dbmlService.extractDbml())
 	}
 
 	@GetMapping("/plantuml/definition", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun plantUmlDefinition(): String {
-		return plantUml.diagramDefinition(dbmlService.generateDbml())
+		return plantUml.diagramDefinition(dbmlService.extractDbml())
 	}
 
 	@GetMapping("/plantuml/svg", produces = ["image/svg+xml"])
 	fun plantUmlSvg(): String {
-		return plantUml.svg(dbmlService.generateDbml())
+		return plantUml.svg(dbmlService.extractDbml())
 	}
 
 	@GetMapping("/dbml/code", produces = [MediaType.TEXT_PLAIN_VALUE])
 	fun dbMlCode(): String {
-		return dbmlService.modelToDbml(dbmlService.generateDbml())
+		return Dbml.dbmlTablesToString(dbmlService.extractDbml())
 	}
 
 	@GetMapping("/dbml/model")
 	fun dbml(): List<DbmlTable> {
-		return dbmlService.generateDbml(schema = "PUBLIC")
+		return dbmlService.extractDbml(schema = "PUBLIC")
 	}
 
 	@GetMapping("/jpa/entities")
