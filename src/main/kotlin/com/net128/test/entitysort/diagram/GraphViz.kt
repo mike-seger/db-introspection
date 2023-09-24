@@ -24,7 +24,11 @@ class GraphViz {
 
             sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
             sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
-            sb.append("\t\t\t<tr><td style=\"font-family: Helvetica, sans-serif\" colspan=\"2\" bgcolor=\"#1d71b8\" color=\"#aaaaaa\"><font color=\"white\">${tableName.uppercase()}</font></td></tr>\n")
+            sb.append("\t\t\t" +
+                "<tr><td style=\"font-family: Helvetica, sans-serif\" colspan=\"2\" bgcolor=\"#1d71b8\" color=\"#aaaaaa\">" +
+                "<font color=\"white\">" +
+                tableName.uppercase() +
+                "</font></td></tr>\n")
 
             table.columns.forEach { column ->
                 val columnName = column.name
