@@ -12,7 +12,7 @@ object Dbml {
         val sb = StringBuilder()
 
         tables.forEach { table ->
-            sb.append("Table ${table.name.lowercase()} {\n")
+            sb.append("Table ${table.name.uppercase()} {\n")
 
             table.columns.forEach { column ->
                 sb.append("  ${column.name} ${mapType(column.type)}".lowercase())
@@ -23,7 +23,7 @@ object Dbml {
             sb.append("}\n\n")
 
             table.references.forEach { reference ->
-                sb.append("Ref: ${table.name.lowercase()}.${reference.fromColumn.lowercase()} ${reference.refType} ${reference.toTable.lowercase()}.${reference.toColumn.lowercase()}\n")
+                sb.append("Ref: ${table.name.uppercase()}.${reference.fromColumn.lowercase()} ${reference.refType} ${reference.toTable.uppercase()}.${reference.toColumn.lowercase()}\n")
             }
 
             if(table.references.isNotEmpty()) sb.append("\n")
@@ -93,13 +93,13 @@ object Dbml {
                         val toTable = parts[2]
                         val toColumn = parts[3]
 
-                        references.add(DbmlReference(tableName, fromColumn, toTable, toColumn, refType))
+                        references.add(DbmlReference(tableName.uppercase(), fromColumn, toTable.uppercase(), toColumn, refType))
                     }
 
                 }
             }
 
-            tables.add(DbmlTable(tableName, columns, references))
+            tables.add(DbmlTable(tableName.uppercase(), columns, references))
         }
 
         return tables
