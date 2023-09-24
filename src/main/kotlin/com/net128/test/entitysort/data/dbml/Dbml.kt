@@ -27,58 +27,6 @@ object Dbml {
         return builder.toString()
     }
 
-    /*
-    fun parseDbmlString(dbml: String): List<DbmlTable> {
-        val tables = mutableListOf<DbmlTable>()
-
-        // Split the input by 'Table' to get individual table definitions
-        val tableDefinitions = dbml.split(Regex("""\bTable\b""")).drop(1)  // Drop the first split as it'll be empty
-
-        for (tableDefinition in tableDefinitions) {
-            val lines = tableDefinition.trim().split("\n")
-
-            val tableName = lines[0].trim().removeSurrounding("`", "`")
-            val columns = mutableListOf<DbmlColumn>()
-            val references = mutableListOf<DbmlReference>()
-
-            for (i in 1 until lines.size) {
-                val line = lines[i].trim()
-                when {
-                    line.startsWith("`") -> {
-                        val parts = line.split(" ")
-                        val columnName = parts[0].removeSurrounding("`", "`")
-                        val columnType = mapType(parts[1])
-                        val isPrimaryKEy = "[pk]" == parts[2] || "[primary key]" == parts[2]
-                        columns.add(DbmlColumn(columnName, columnType, isPrimaryKEy))
-                    }
-                    line.startsWith("ref:") -> {
-                        // Split based on relationship types, assuming they don't appear in column names
-                        val parts = line.split(Regex("""[\[\]<>\- ]+"""))
-
-                        val fromColumn = parts[1]
-                        val refType = when {
-                            line.contains("<>") -> RefType.ManyToMany
-                            line.contains("-") -> RefType.OneToOne
-                            line.contains(">") -> RefType.ManyToOne
-                            line.contains("<") -> RefType.OneToMany
-                            else -> throw IllegalArgumentException("Unknown reference type in line: $line")
-                        }
-
-                        val toTable = parts[2]
-                        val toColumn = parts[3]
-
-                        references.add(DbmlReference(tableName.uppercase(), fromColumn, toTable.uppercase(), toColumn, refType))
-                    }
-
-                }
-            }
-
-            tables.add(DbmlTable(tableName.uppercase(), columns, references))
-        }
-
-        return tables
-    }*/
-
     fun mapType(type: String) : String {
         return if(typeMap[type]!=null) typeMap[type]!! else type
     }
