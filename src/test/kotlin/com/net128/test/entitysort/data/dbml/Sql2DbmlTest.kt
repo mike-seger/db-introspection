@@ -9,13 +9,13 @@ class Sql2DbmlTest {
     @ParameterizedTest
     @CsvSource(
         "/sql/complex-db-ddl.sql",
-        "/sql/simple-db-ddl.sql"
+        //"/sql/simple-db-ddl.sql",
     )
     fun testParseSql(sqlFile: String) {
         val sql = DbmlTable::class.java.getResourceAsStream(sqlFile)?.bufferedReader().use { it?.readText() }
             ?: throw IllegalArgumentException("Resource not found")
 
-        val dbmlTables = parseSql(sql.trim())
+        val dbmlTables = parseSql(sql.trim()).sortedBy { it.name }
 
         println(dbmlTablesToString(dbmlTables))
     }

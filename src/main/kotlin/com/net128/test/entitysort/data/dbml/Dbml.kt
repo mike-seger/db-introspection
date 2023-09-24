@@ -8,52 +8,26 @@ object Dbml {
         "DOUBLE PRECISION" to "DOUBLE"
     )
 
-    fun dbmlTablesToString1(tables: List<DbmlTable>): String {
-        val sb = StringBuilder()
-
-        tables.forEach { table ->
-            sb.append("Table ${table.name.uppercase()} {\n")
-
-            table.columns.forEach { column ->
-                sb.append("  ${column.name} ${mapType(column.type)}".lowercase())
-                if(column.isPrimaryKey == true) sb.append(" [pk]")
-                sb.append("\n")
-            }
-
-            sb.append("}\n\n")
-
-            table.references.forEach { reference ->
-                sb.append("Ref: ${table.name.uppercase()}.${reference.fromColumn.lowercase()} ${reference.refType} ${reference.toTable.uppercase()}.${reference.toColumn.lowercase()}\n")
-            }
-
-            if(table.references.isNotEmpty()) sb.append("\n")
-        }
-
-        return sb.toString()
-    }
-
     fun dbmlTablesToString(tables: List<DbmlTable>): String {
         val builder = StringBuilder()
         for (table in tables) {
-            builder.append("Table ${table.name} {\n")
+            builder.append("Table ${table.name.uppercase()} {\n")
             for (column in table.columns) {
                 column.isPrimaryKey
                 builder.append("  ${column.name} ${column.type.lowercase()}${
                     if (column.isPrimaryKey == true) " [pk]" else ""}\n")
             }
             builder.append("}\n")
-            for (reference in table.references) {
-                builder.append("Ref: ${table.name}.${reference.fromColumn} ${reference.refType} ${reference.toTable}.${reference.toColumn}\n")
+            for (reference in table.references.sortedBy { it.toString() }) {
+                builder.append("Ref: ${table.name.uppercase()}.${reference.fromColumn} ${reference.refType} ${reference.toTable.uppercase()}.${reference.toColumn}\n")
             }
             if(table.references.isNotEmpty()) builder.append("\n")
         }
 
-
-
         return builder.toString()
     }
 
-
+    /*
     fun parseDbmlString(dbml: String): List<DbmlTable> {
         val tables = mutableListOf<DbmlTable>()
 
@@ -103,7 +77,7 @@ object Dbml {
         }
 
         return tables
-    }
+    }*/
 
     fun mapType(type: String) : String {
         return if(typeMap[type]!=null) typeMap[type]!! else type

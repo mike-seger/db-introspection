@@ -84,8 +84,8 @@ class DbmlService(private val dataSource: DataSource) {
 
                     val refType = when {
                         fkUnique && pkUnique -> RefType.OneToOne
-                        !fkUnique && pkUnique -> RefType.OneToMany
-                        fkUnique && !pkUnique -> RefType.ManyToOne
+                        !fkUnique && pkUnique -> RefType.ManyToOne
+                        fkUnique && !pkUnique -> RefType.OneToMany
                         else -> RefType.ManyToMany
                     }
 
