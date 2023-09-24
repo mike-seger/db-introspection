@@ -13,8 +13,7 @@ object Dbml {
         for (table in tables) {
             builder.append("Table ${table.name.uppercase()} {\n")
             for (column in table.columns) {
-                column.isPrimaryKey
-                builder.append("  ${column.name} ${column.type.lowercase()}${
+                builder.append("  \"${column.name}\" \"${column.type.lowercase()}\"${
                     if (column.isPrimaryKey == true) " [pk]" else ""}\n")
             }
             builder.append("}\n")

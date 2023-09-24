@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphviz ERD Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
+    <style>
+        #graph {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="erDiagramDisplay"></div>
+
+<script>
+    if (typeof Viz !== "undefined") {
+        fetch('/graphviz/dot')
+            .then(response => response.text())
+            .then(data => {
+                const viz = new Viz();
+                viz.renderSVGElement(data)
+                    .then(element => {
+                        document.getElementById('erDiagramDisplay').appendChild(element);
+                    })
+                    .catch(error => {
+                        console.error("Error rendering the graph:", error);
+                    });
+            })
+            .catch(error => {
+                console.error("There was an error fetching the DOT representation:", error);
+            });
+    } else {
+        console.error("Viz.js is not loaded correctly.");
+    }
+</script>
+<script src="../common/page-move-zoom.js"></script>
+
+</body>
+</html>

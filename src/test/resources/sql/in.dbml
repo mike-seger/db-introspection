@@ -1,0 +1,198 @@
+Table ADDRESS {
+  id bigint [pk]
+  city varchar
+  street varchar
+  country_id bigint
+  profile_id bigint
+  state_id bigint
+}
+Ref: ADDRESS.country_id > COUNTRY.id
+Ref: ADDRESS.profile_id > USER_PROFILE.id
+Ref: ADDRESS.state_id > STATE.id
+
+Table BRAND {
+  id bigint [pk]
+  description varchar
+  name varchar
+}
+Table CART {
+  id bigint [pk]
+  customer_id bigint
+}
+Ref: CART.customer_id > CUSTOMER.id
+
+Table CART_ITEM {
+  id bigint [pk]
+  quantity integer
+  cart_id bigint
+  product_id bigint
+}
+Ref: CART_ITEM.cart_id > CART.id
+Ref: CART_ITEM.product_id > PRODUCT.id
+
+Table CATEGORY {
+  id bigint [pk]
+  name varchar
+  parent_category_id bigint
+}
+Ref: CATEGORY.parent_category_id > CATEGORY.id
+
+Table COUNTRY {
+  id bigint [pk]
+  name character
+}
+Table CUSTOMER {
+  id bigint [pk]
+  email varchar
+  password varchar
+  username varchar
+  profile_id bigint
+}
+Ref: CUSTOMER.profile_id > USER_PROFILE.id
+
+Table CUSTOMER_ORDER {
+  id bigint [pk]
+  date varchar
+  status varchar
+  total_amount numeric
+  customer_id bigint
+}
+Ref: CUSTOMER_ORDER.customer_id > CUSTOMER.id
+
+Table DISCOUNT {
+  id bigint [pk]
+  code varchar
+  end_date date
+  percentage numeric
+  start_date date
+}
+Table DISCOUNT_PRODUCT {
+  discount_id bigint
+  applicable_products_id bigint
+}
+Ref: DISCOUNT_PRODUCT.applicable_products_id <> PRODUCT.id
+Ref: DISCOUNT_PRODUCT.discount_id <> DISCOUNT.id
+
+Table INVENTORY {
+  id bigint [pk]
+  stock_count integer
+  product_id bigint
+  warehouse_id bigint
+}
+Ref: INVENTORY.product_id > PRODUCT.id
+Ref: INVENTORY.warehouse_id > WAREHOUSE.id
+
+Table MANUFACTURER {
+  id bigint [pk]
+  name varchar
+}
+Table MANUFACTURER_PRODUCT {
+  manufacturer_id bigint
+  products_id bigint
+}
+Ref: MANUFACTURER_PRODUCT.manufacturer_id <> MANUFACTURER.id
+Ref: MANUFACTURER_PRODUCT.products_id <> PRODUCT.id
+
+Table ORDER_ITEM {
+  id bigint [pk]
+  quantity integer
+  customer_order_id bigint
+  product_id bigint
+}
+Ref: ORDER_ITEM.customer_order_id > CUSTOMER_ORDER.id
+Ref: ORDER_ITEM.product_id > PRODUCT.id
+
+Table PAYMENT {
+  id bigint [pk]
+  amount numeric
+  date varchar
+  payment_type varchar
+  customer_order_id bigint
+}
+Ref: PAYMENT.customer_order_id > CUSTOMER_ORDER.id
+
+Table PAYMENT_DETAIL {
+  id bigint [pk]
+  credit_card_number varchar
+  profile_id bigint
+}
+Ref: PAYMENT_DETAIL.profile_id > USER_PROFILE.id
+
+Table PRODUCT {
+  id bigint [pk]
+  description varchar
+  name varchar
+  price numeric
+  brand_id bigint
+  category_id bigint
+}
+Ref: PRODUCT.brand_id > BRAND.id
+Ref: PRODUCT.category_id > CATEGORY.id
+
+Table PRODUCT_TAG {
+  products_id bigint
+  tags_id bigint
+}
+Ref: PRODUCT_TAG.products_id <> PRODUCT.id
+Ref: PRODUCT_TAG.tags_id <> TAG.id
+
+Table REVIEW {
+  id bigint [pk]
+  comment varchar
+  rating integer
+  customer_id bigint
+  product_id bigint
+}
+Ref: REVIEW.customer_id > CUSTOMER.id
+Ref: REVIEW.product_id > PRODUCT.id
+
+Table SHIPMENT {
+  id bigint [pk]
+  status varchar
+  tracking_number varchar
+  customer_order_id bigint
+}
+Ref: SHIPMENT.customer_order_id > CUSTOMER_ORDER.id
+
+Table STATE {
+  id bigint [pk]
+  name varchar
+}
+Table SUPPLIER {
+  id bigint [pk]
+  name varchar
+}
+Table SUPPLIER_PRODUCT {
+  supplier_id bigint
+  products_id bigint
+}
+Ref: SUPPLIER_PRODUCT.products_id <> PRODUCT.id
+Ref: SUPPLIER_PRODUCT.supplier_id <> SUPPLIER.id
+
+Table TAG {
+  id bigint [pk]
+  description varchar
+  name varchar
+}
+Table USER_PROFILE {
+  id bigint [pk]
+  first_name varchar
+  last_name varchar
+}
+Table WAREHOUSE {
+  id bigint [pk]
+  location varchar
+  name varchar
+}
+Table WISHLIST {
+  id bigint [pk]
+  customer_id bigint
+}
+Ref: WISHLIST.customer_id > CUSTOMER.id
+
+Table WISHLIST_PRODUCT {
+  wishlist_id bigint
+  products_id bigint
+}
+Ref: WISHLIST_PRODUCT.products_id <> PRODUCT.id
+Ref: WISHLIST_PRODUCT.wishlist_id <> WISHLIST.id

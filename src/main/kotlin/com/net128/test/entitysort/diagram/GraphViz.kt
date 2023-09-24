@@ -17,14 +17,14 @@ class GraphViz {
         sb.append("digraph ERD {\n")
         sb.append("\tgraph[rankdir=LR, splines=true];\n")
         sb.append("\tnode [shape=record, fontsize=10, fontname=\"Verdana\"];\n")
-        sb.append("\tedge [style=solid, color=\"gray\"];\n")
+        sb.append("\tedge [style=solid, color=\"#888888\"];\n")
 
         tables.forEach { table ->
             val tableName = table.name
 
             sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
             sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
-            sb.append("\t\t\t<tr><td bgcolor=\"dodgerblue4\" color=\"black\"><font color=\"white\">$tableName</font></td></tr>\n")
+            sb.append("\t\t\t<tr><td style=\"font-family: Helvetica, sans-serif\" colspan=\"2\" bgcolor=\"#1d71b8\" color=\"#aaaaaa\"><font color=\"white\">${tableName.uppercase()}</font></td></tr>\n")
 
             table.columns.forEach { column ->
                 val columnName = column.name
@@ -32,8 +32,8 @@ class GraphViz {
                     .replace(" ", "_")
                     .replace("CHARACTER_VARYING", "VARCHAR")
 
-                sb.append("<tr><td>$columnName : $dataType\u2001\u2003\u2001\u2001\u2001</td></tr>\n")
-            }
+                sb.append("<tr><td bgcolor=\"#e8e8e8\" color=\"#aaaaaa\" align=\"left\">$columnName</td>" +
+                        "<td bgcolor=\"#e8e8e8\"  color=\"#aaaaaa\" align=\"right\">$dataType</td></tr>\n")            }
 
             sb.append("</table>>];\n")
         }

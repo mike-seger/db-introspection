@@ -11,7 +11,7 @@ object Sql2Dbml {
         val tables = mutableListOf<DbmlTable>()
 
         try {
-            val statements = CCJSqlParserUtil.parseStatements(sql).statements
+            val statements = CCJSqlParserUtil.parseStatements(sql)
             for (stmt in statements) {
                 if (stmt is CreateTable) {
                     val tableName = stmt.table.name.lowercase()
@@ -21,15 +21,15 @@ object Sql2Dbml {
 
                     stmt.indexes?.forEach { index ->
                         if (index is ForeignKeyIndex) {
-                            val fromColumns = index.columnsNames.map { it.lowercase() }
+                            val fromColumns = index.columnsNames.map { cleanColumnName(it) }
                             val toTable = index.table.name.lowercase()
-                            val toColumns = index.referencedColumnNames.map { it.lowercase() }
+                            val toColumns = index.referencedColumnNames.map { cleanColumnName(it) }
 
                             fromColumns.zip(toColumns).forEach { (fromColumn, toColumn) ->
                                 references.add(DbmlReference(tableName, fromColumn, toTable, toColumn, RefType.ManyToOne))
                             }
                         } else if (index.type == "PRIMARY KEY") {
-                            primaryKeys.addAll(index.columnsNames.map { it.lowercase() })
+                            primaryKeys.addAll(index.columnsNames.map { it.lowercase().replace("\"", "") })
                         }
                     }
 
@@ -41,10 +41,11 @@ object Sql2Dbml {
                         } else {
                             typeName
                         }
-                        DbmlColumn(it.columnName.lowercase(), typeWithPrecision, it.columnSpecs?.containsAll(listOf("PRIMARY", "KEY")) ?: false)
+                        val columnName = cleanColumnName(it.columnName)
+                        DbmlColumn(columnName, typeWithPrecision, it.columnSpecs?.containsAll(listOf("PRIMARY", "KEY")) ?: false)
 
-                        val isPrimaryKey = it.columnName.lowercase() in primaryKeys || it.columnSpecs?.containsAll(listOf("PRIMARY", "KEY")) == true
-                        columns.add(DbmlColumn(it.columnName.lowercase(), typeWithPrecision.lowercase(), isPrimaryKey))
+                        val isPrimaryKey = columnName in primaryKeys || it.columnSpecs?.containsAll(listOf("PRIMARY", "KEY")) == true
+                        columns.add(DbmlColumn(columnName, typeWithPrecision.lowercase(), isPrimaryKey))
                     }
 
                     tables.add(DbmlTable(tableName, columns, references.sortedBy { it.toString() }))
@@ -55,4 +56,6 @@ object Sql2Dbml {
         }
         return tables
     }
+
+    private fun cleanColumnName(columnName: String) = columnName.lowercase().replace("\"", "")
 }
