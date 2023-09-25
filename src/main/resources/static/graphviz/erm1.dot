@@ -1,183 +1,183 @@
 digraph ERD {
 graph[rankdir=LR, splines=true];
 node [shape=record, fontsize=10, fontname="Verdana"];
-edge [style=solid, color="gray"];
+edge [style=solid, color="#888888"];
 "address" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">address</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>city : varchar(255)     </td></tr>
-<tr><td>street : varchar(255)     </td></tr>
-<tr><td>country_id : bigint     </td></tr>
-<tr><td>profile_id : bigint     </td></tr>
-<tr><td>state_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>ADDRESS</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">city</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">street</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">country_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">profile_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">state_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "brand" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">brand</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>description : varchar(255)     </td></tr>
-<tr><td>name : varchar(255)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>BRAND</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">description</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
 </table>>];
 "cart" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">cart</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>customer_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>CART</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "cart_item" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">cart_item</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>quantity : integer     </td></tr>
-<tr><td>cart_id : bigint     </td></tr>
-<tr><td>product_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>CART_ITEM</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">quantity</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">integer</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">cart_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">product_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "category" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">category</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>name : varchar(255)     </td></tr>
-<tr><td>parent_category_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>CATEGORY</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">parent_category_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "country" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">country</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>name : character     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>COUNTRY</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">character</td></tr>
 </table>>];
 "customer" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">customer</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>email : varchar(255)     </td></tr>
-<tr><td>password : varchar(255)     </td></tr>
-<tr><td>username : varchar(255)     </td></tr>
-<tr><td>profile_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>CUSTOMER</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">email</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">password</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">username</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">profile_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "customer_order" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">customer_order</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>date : varchar(255)     </td></tr>
-<tr><td>status : varchar(255)     </td></tr>
-<tr><td>total_amount : numeric     </td></tr>
-<tr><td>customer_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>CUSTOMER_ORDER</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">date</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">status</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">total_amount</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">numeric</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "discount" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">discount</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>code : varchar(255)     </td></tr>
-<tr><td>end_date : date     </td></tr>
-<tr><td>percentage : numeric(53)     </td></tr>
-<tr><td>start_date : date     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>DISCOUNT</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">code</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">end_date</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">date</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">percentage</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">numeric(53)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">start_date</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">date</td></tr>
 </table>>];
 "discount_product" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">discount_product</font></td></tr>
-<tr><td>discount_id : bigint     </td></tr>
-<tr><td>applicable_products_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>DISCOUNT_PRODUCT</b></font></td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">discount_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">applicable_products_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "inventory" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">inventory</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>stock_count : integer     </td></tr>
-<tr><td>product_id : bigint     </td></tr>
-<tr><td>warehouse_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>INVENTORY</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">stock_count</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">integer</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">product_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">warehouse_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "manufacturer" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">manufacturer</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>name : varchar(32)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>MANUFACTURER</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(32)</td></tr>
 </table>>];
 "manufacturer_product" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">manufacturer_product</font></td></tr>
-<tr><td>manufacturer_id : bigint     </td></tr>
-<tr><td>products_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>MANUFACTURER_PRODUCT</b></font></td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">manufacturer_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">products_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "order_item" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">order_item</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>quantity : integer     </td></tr>
-<tr><td>customer_order_id : bigint     </td></tr>
-<tr><td>product_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>ORDER_ITEM</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">quantity</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">integer</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_order_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">product_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "payment" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">payment</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>amount : numeric     </td></tr>
-<tr><td>date : varchar(255)     </td></tr>
-<tr><td>payment_type : varchar(255)     </td></tr>
-<tr><td>customer_order_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>PAYMENT</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">amount</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">numeric</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">date</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">payment_type</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_order_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "payment_detail" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">payment_detail</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>credit_card_number : varchar(255)     </td></tr>
-<tr><td>profile_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>PAYMENT_DETAIL</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">credit_card_number</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">profile_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "product" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">product</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>description : varchar(255)     </td></tr>
-<tr><td>name : varchar(255)     </td></tr>
-<tr><td>price : numeric     </td></tr>
-<tr><td>brand_id : bigint     </td></tr>
-<tr><td>category_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>PRODUCT</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">description</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">price</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">numeric</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">brand_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">category_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "product_tag" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">product_tag</font></td></tr>
-<tr><td>products_id : bigint     </td></tr>
-<tr><td>tags_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>PRODUCT_TAG</b></font></td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">products_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">tags_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "review" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">review</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>comment : varchar(255)     </td></tr>
-<tr><td>rating : integer     </td></tr>
-<tr><td>customer_id : bigint     </td></tr>
-<tr><td>product_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>REVIEW</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">comment</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">rating</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">integer</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">product_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "shipment" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">shipment</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>status : varchar(255)     </td></tr>
-<tr><td>tracking_number : varchar(16)     </td></tr>
-<tr><td>customer_order_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>SHIPMENT</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">status</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">tracking_number</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(16)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_order_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "state" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">state</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>name : varchar(255)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>STATE</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
 </table>>];
 "supplier" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">supplier</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>name : varchar(64)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>SUPPLIER</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(64)</td></tr>
 </table>>];
 "supplier_product" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">supplier_product</font></td></tr>
-<tr><td>supplier_id : bigint     </td></tr>
-<tr><td>products_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>SUPPLIER_PRODUCT</b></font></td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">supplier_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">products_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "tag" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">tag</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>description : varchar(128)     </td></tr>
-<tr><td>name : varchar(255)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>TAG</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">description</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(128)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
 </table>>];
 "user_profile" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">user_profile</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>first_name : varchar(255)     </td></tr>
-<tr><td>last_name : varchar(255)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>USER_PROFILE</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">first_name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">last_name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(255)</td></tr>
 </table>>];
 "warehouse" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">warehouse</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>location : varchar(64)     </td></tr>
-<tr><td>name : varchar(32)     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>WAREHOUSE</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">location</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(64)</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">name</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">varchar(32)</td></tr>
 </table>>];
 "wishlist" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">wishlist</font></td></tr>
-<tr><td>id : bigint     </td></tr>
-<tr><td>customer_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>WISHLIST</b></font></td></tr>
+<tr><td  valign="bottom" height="20" bgcolor="#e8e8e8" color="#aaaaaa" align="left"><b>id</b></td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">customer_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "wishlist_product" [shape=none, margin=0, label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2">
-<tr><td bgcolor="dodgerblue4" color="black"><font color="white">wishlist_product</font></td></tr>
-<tr><td>wishlist_id : bigint     </td></tr>
-<tr><td>products_id : bigint     </td></tr>
+<tr><td height="21" valign="bottom" colspan="2" bgcolor="#1d71b8" color="#aaaaaa" fontname="Helvetica, sans-serif"><font color="white"><b>WISHLIST_PRODUCT</b></font></td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">wishlist_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
+<tr><td  bgcolor="#e8e8e8" color="#aaaaaa" align="left">products_id</td><td bgcolor="#e8e8e8"  color="#aaaaaa" align="right">bigint</td></tr>
 </table>>];
 "country" -> "address";
 "state" -> "address";

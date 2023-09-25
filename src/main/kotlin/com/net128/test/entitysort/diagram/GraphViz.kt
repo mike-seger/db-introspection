@@ -25,18 +25,21 @@ class GraphViz {
             sb.append("\t\"$tableName\" [shape=none, margin=0, label=<")
             sb.append("<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n")
             sb.append("\t\t\t" +
-                "<tr><td style=\"font-family: Helvetica, sans-serif\" colspan=\"2\" bgcolor=\"#1d71b8\" color=\"#aaaaaa\">" +
-                "<font color=\"white\">" +
+                "<tr><td height=\"21\" valign=\"bottom\" colspan=\"2\" bgcolor=\"#1d71b8\" color=\"#aaaaaa\" fontname=\"Helvetica, sans-serif\">" +
+                "<font color=\"white\"><b>" +
                 tableName.uppercase() +
-                "</font></td></tr>\n")
+                "</b></font></td></tr>\n")
 
             table.columns.forEach { column ->
                 val columnName = column.name
                 val dataType = column.type
                     .replace(" ", "_")
-                    .replace("CHARACTER_VARYING", "VARCHAR")
 
-                sb.append("<tr><td bgcolor=\"#e8e8e8\" color=\"#aaaaaa\" align=\"left\">$columnName</td>" +
+                var columnCell = if(column.isPrimaryKey == true) "<b>$columnName</b>" else columnName
+
+                var cellStyle = if(column.isPrimaryKey == true) " valign=\"bottom\" height=\"20\"" else ""
+
+                sb.append("<tr><td $cellStyle bgcolor=\"#e8e8e8\" color=\"#aaaaaa\" align=\"left\">$columnCell</td>" +
                         "<td bgcolor=\"#e8e8e8\"  color=\"#aaaaaa\" align=\"right\">$dataType</td></tr>\n")            }
 
             sb.append("</table>>];\n")
