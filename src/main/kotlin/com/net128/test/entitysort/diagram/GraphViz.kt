@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service
 class GraphViz {
     @Suppress("unused")
     enum class RankDir { TB, LR, RL, BT }
-    fun diagramDefinition(tables: List<DbmlTable>, rankDir: RankDir = RankDir.TB, splines: Boolean = true,
-            withDataTypes: Boolean = true): String {
+    fun diagramDefinition(tables: List<DbmlTable>, rankDir: RankDir = RankDir.TB,
+            splines: Boolean = true, withDataTypes: Boolean = true): String {
         val sb = StringBuilder()
         val colSpan = if(withDataTypes) 2 else 1
 
