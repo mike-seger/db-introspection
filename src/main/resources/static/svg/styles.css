@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: lightgray;
+  }
+  
+  #viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  #viewer svg {
+    background-color: white;
+    border: 1px solid #d3d3d3;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
