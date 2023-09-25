@@ -5,6 +5,7 @@ import java.sql.DatabaseMetaData
 import javax.sql.DataSource
 
 @Service
+@Suppress("SpellCheckingInspection")
 class DbmlService(private val dataSource: DataSource) {
     fun extractDbml(qualifiedTableNames: List<String>? = null, schema: String? = null): List<DbmlTable> {
         dataSource.connection.use { connection ->

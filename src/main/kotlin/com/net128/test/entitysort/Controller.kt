@@ -19,7 +19,6 @@ class Controller(
 	private val entityScanner: EntityScanner,
 	private val schemaScanner: SchemaScanner,
 	private val mermaid: Mermaid,
-	private val dbDiagramService: DbDiagramService,
 	private val graphViz: GraphViz,
 	private val plantUml: PlantUml,
 	private val graphMl: GraphMl,

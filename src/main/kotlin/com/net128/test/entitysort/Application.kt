@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EntityScan("com.net128.test.entitysort.model") // Replace with your package name
 @EnableJpaRepositories("com.net128.test.entitysort.repository") // Replace with your repository package
 @ComponentScan("com.net128.test.entitysort")
+@Suppress("SpellCheckingInspection")
 class EntitysortApplication
 
 fun main(args: Array<String>) {

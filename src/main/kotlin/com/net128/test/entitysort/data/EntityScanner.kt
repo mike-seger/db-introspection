@@ -11,7 +11,6 @@ import kotlin.reflect.jvm.javaField
 
 @Component
 class EntityScanner(private val entityManagerFactory: EntityManagerFactory) {
-    // Map to store @Id properties for each entity class
     private val idPropertiesMap: MutableMap<KClass<*>, KProperty<*>> = scanForIdProperties()
 
     fun getOrderedEntityClasses(): List<KClass<*>> {

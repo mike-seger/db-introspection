@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 @Service
 class GraphMl {
 
+    @Suppress("SpellCheckingInspection")
     fun diagramDefinition(tables: List<DbmlTable>): String {
         val graphMLBuilder = StringBuilder()
 

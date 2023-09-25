@@ -1,3 +1,4 @@
+@file:Suppress("unused")
 package com.net128.test.entitysort.model
 
 import java.math.BigDecimal

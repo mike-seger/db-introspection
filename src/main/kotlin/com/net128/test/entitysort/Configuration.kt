@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
+@Suppress("unused")
 class Configuration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @ConditionalOnExpression("'\${h2.server.port}' != '-'")
