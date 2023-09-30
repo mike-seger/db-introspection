@@ -9,7 +9,8 @@ An example application shows how to extend it with a few generic classes in orde
 The default ports are:
 Application: 8081
 DB Server: 9092  
-The default can be overriden by e.g. environment variables, such as: H2_SERVER_PORT=18085 SERVER_PORT=18084 
+The default can be overriden by e.g. environment variables, such as:  
+H2_SERVER_PORT=18085 SERVER_PORT=18084 
 
 ### Connect to DB Server
 URL: jdbc:h2:tcp://localhost:18084/mem:db1
