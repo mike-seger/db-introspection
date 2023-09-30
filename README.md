@@ -16,7 +16,7 @@ H2_SERVER_PORT=18085 SERVER_PORT=18084
 ### Connect to the application:
 http://localhost:8081/
 
-### Connect to DB Server
+### DB Server connection parameters
 URL: jdbc:h2:tcp://localhost:9092/mem:db1
 User: sa
 Password: <empty>
