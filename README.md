@@ -1,4 +1,4 @@
-# entitysort
+# db-introspection
 
 ## Run application
 ```
