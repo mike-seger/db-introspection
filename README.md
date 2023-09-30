@@ -1,5 +1,6 @@
 # db-introspection
 A collection of concepts allowing the introspection and visualization of datasources and SQL DDLs.
+An example application shows how to extend it with a few generic classes in order to provide it with data introspection.
 
 ## Run application
 ```
