@@ -1,4 +1,5 @@
 # db-introspection
+A collection of concepts allowing the introspection and visualization of datasources and SQL DDLs.
 
 ## Run application
 ```
