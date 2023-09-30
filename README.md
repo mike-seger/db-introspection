@@ -10,6 +10,7 @@ The default ports are:
 Application: 8081
 DB Server: 9092  
 The default can be overriden by e.g. environment variables, such as:  
+
 H2_SERVER_PORT=18085 SERVER_PORT=18084 
 
 ### Connect to DB Server
